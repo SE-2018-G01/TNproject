@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.timenote.R;
 
@@ -47,12 +48,14 @@ public class Change_pwd extends AppCompatActivity {
                 if(spwd1.length()>=8&&(spwd1.equals(spwd2)))
                 {
                     //修改密码
+                    Toast.makeText(Change_pwd.this,"密码修改成功",Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else if(spwd1.length()<8)
                     {
                         pwd1_error.setVisibility(View.VISIBLE);
                     }
-                    else if(spwd1.equals(spwd2))
+                    else if(spwd1.equals(spwd2)!=true)
                     {
                         pwd2_error.setVisibility(View.VISIBLE);
                     }

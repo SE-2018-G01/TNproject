@@ -5,23 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
+    android:id="@+id/activity_na"
     tools:context="com.example.administrator.timenote.Ui.Calendar_View">
 
-    <include
-        layout="@layout/end_title_1"
-        android:id="@+id/include_1"
-       />
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="0dp"
-        android:layout_height="313dp"
-        android:firstDayOfWeek="1"
-        android:focusedMonthDateColor="#66CCCC"
-        android:maxDate="01/01/2050"
-        android:minDate="01/01/2017"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:id="@+id/rg_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/task_1"
+                style="@style/none_2"
+                android:layout_width="95dp"
+                android:drawableTop="@drawable/task"
+                android:gravity="center"
+                android:text="@string/任务" />
+
+            <RadioButton
+                android:id="@+id/calendar_1"
+                style="@style/none_2"
+                android:layout_width="95dp"
+                android:drawableTop="@drawable/calendar"
+                android:gravity="center"
+                android:text="@string/日历" />
+
+            <RadioButton
+                android:id="@+id/yezi_1"
+                style="@style/none_2"
+                android:layout_width="95dp"
+                android:drawableTop="@drawable/yezi"
+                android:gravity="center"
+                android:text="@string/叶子" />
+
+            <RadioButton
+            android:id="@+id/setup_1"
+            style="@style/none_2"
+            android:layout_width="95dp"
+            android:drawableTop="@drawable/setup"
+            android:gravity="center"
+            android:text="@string/设置" />
+        </RadioGroup>
+
+
 
 </android.support.constraint.ConstraintLayout>
