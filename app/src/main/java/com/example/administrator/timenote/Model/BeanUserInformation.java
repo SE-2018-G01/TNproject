@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class BeanUserInformation {
     public static BeanUserInformation currentLoginUser=null;
+    public static BeanUserInformation tryLoginUser=null;
     private int userid;
     private String username;
     private String userpassword;

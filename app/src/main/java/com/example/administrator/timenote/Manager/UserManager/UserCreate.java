@@ -1,21 +1,17 @@
 package com.example.administrator.timenote.Manager.UserManager;
 
-import com.example.administrator.timenote.Model.BeanUserInformation;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.MarshalBase64;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import java.lang.reflect.Type;
-
 /**
  * Created by Sprou on 2018/5/28.
  */
 
 public class UserCreate {
-    public void getRemoteInfo(String userid,String userpwd,String username) {
+    public String getRemoteInfo(String userid, String userpwd, String username) {
         // 命名空间
         String nameSpace = "http://tempuri.org/";
         // 调用的方法名称
@@ -40,23 +36,24 @@ public class UserCreate {
         envelope.setOutputSoapObject(rpc);
         HttpTransportSE transport = new HttpTransportSE(endPoint);
         transport.debug = true;
+        String result = "false";
         try {
             // 调用WebService
             transport.call(soapAction, envelope);
-            if (envelope.bodyIn!=null) {
-                System.out.println(envelope.bodyIn);
-
-                SoapObject result = (SoapObject) envelope.bodyIn;
+            if (envelope.getResponse()!=null) {
+                System.out.println(envelope.getResponse());
+                result = envelope.getResponse().toString();
                 System.out.print(result);
+                return result;
             }
         } catch (Exception e) {
             e.getMessage();
         }
-
+        return result;
     }
     public static void main(String[] args){
         UserCreate userCreate = new UserCreate();
-        userCreate.getRemoteInfo("1191583108@qq.com","12345678","goldenboy");
-
+        String sign = userCreate.getRemoteInfo("1191583108@qq.com","12345678","goldenboy");
+        System.out.print(sign);
     }
 }

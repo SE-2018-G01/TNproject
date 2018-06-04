@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -99,6 +100,8 @@ public class Sign_UpActivity extends AppCompatActivity {
             }
         });
 
+        pwd.setTransformationMethod(PasswordTransformationMethod
+                .getInstance());
         //密码焦点获得与失去
         pwd.setOnFocusChangeListener(new android.view.View.
                 OnFocusChangeListener() {
@@ -119,6 +122,9 @@ public class Sign_UpActivity extends AppCompatActivity {
             }
         });
 
+
+        pwd2.setTransformationMethod(PasswordTransformationMethod
+                .getInstance());
         pwd2.setOnFocusChangeListener(new android.view.View.
                 OnFocusChangeListener() {
             @Override
