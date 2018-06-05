@@ -34,6 +34,7 @@ import static com.example.administrator.timenote.Model.BeanUserInformation.tryLo
 public class MainActivity extends AppCompatActivity {
 
     private EditText pwd, uesrid;
+    private String suesrid;
     public static Handler myHandler;
     //Message msg = new Message();
     //Message msg = myHandler.obtainMessage();
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 
             public void onClick(View v) {
-                final String suesrid = uesrid.getText().toString();
+                suesrid=uesrid.getText().toString();
                 String spwd = pwd.getText().toString();
 
 //                myHandler = new Handler(){
@@ -122,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                         //msg.obj = u_rst;
                         //msg.what = 1;
                         //myHandler.sendMessage(msg);
-                        System.out.println(1);
                     }
                 });
                 t.start();
@@ -131,12 +131,12 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                UserLogin userLogin = new UserLogin();
-                       userLogin.getRemoteInfo(suesrid);
+
                 //判断账号密码是否匹配，是则进入主界面，否则弹框提示
                 if ((suesrid.equals(tryLoginUser.getUseremail())) && (spwd.equals(tryLoginUser.getUserpassword()))) {
                     Intent intent = new Intent(MainActivity.this, Calendar_View.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     AlertDialog.Builder alterDialog = new AlertDialog.Builder(MainActivity.this);
                     alterDialog.setTitle("糟糕！");
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                             uesrid.requestFocus();
                         }
                     });
-                            alterDialog.show();
+                    alterDialog.show();
                 }
                 currentLoginUser = tryLoginUser;
             }

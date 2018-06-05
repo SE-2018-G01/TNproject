@@ -21,11 +21,16 @@ public class Email_sure extends Dialog {
          */
         private Button back;
         private Context  context;
-        private Button resend;
-        int recLen=60;//倒计时
-        private Button sure;
-        public EditText Verification_code_1;
-        private TextView Verification_code_error_1;
+        private boolean issue=false; // 是否验证成功
+        private Button resend;// 重新发送按钮
+        int recLen=60;// 倒计时
+        private Button sure;// 确认按钮
+        public EditText Verification_code_1;// 验证码输入框
+        private TextView Verification_code_error_1;// 验证码错误信息
+
+        public boolean getIssue() {
+            return issue;
+        }
 
         public Email_sure(Context context) {
             super(context);
@@ -77,9 +82,9 @@ public class Email_sure extends Dialog {
                 public void onClick(View view)
                 {
                     String scode = Verification_code_1.getText().toString();
-                    if(scode.equals("12263")==true)//验证码验证
+                    if(scode.equals("12263"))//验证码验证
                     {
-                        //注册
+                        issue = true;
                         dismiss();
                     }
                     else
@@ -129,5 +134,4 @@ public class Email_sure extends Dialog {
                 resend.setVisibility(View.VISIBLE);
             }
         };
-
 }

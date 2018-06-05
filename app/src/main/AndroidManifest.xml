@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.administrator.timenote">
 
-    <uses-permission android:name="android.permission.INTERNET">
-
-    </uses-permission>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS">
-
-    </uses-permission>
-    <!--<uses-permission android:name="android.permission.INSTALL_PACKAGES"></uses-permission>-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission
+        android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +19,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-library android:name="android.test.runner" />
+
         <activity android:name=".Ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,10 +32,10 @@
         <activity android:name=".Ui.Calendar_View" />
         <activity android:name=".Ui.Forgot_pwd" />
         <activity android:name=".Ui.Change_pwd" />
-        <activity android:name=".Ui.EndTitle" />
-        <activity android:name=".Ui.Mainlist">
-
-        </activity>
+        <activity android:name=".Ui.Mainlist" />
+        <activity android:name=".Ui.User_information" />
+        <activity android:name=".Ui.Task_Update" />
+        <activity android:name=".Ui.Pesonal"></activity>
     </application>
 
 </manifest>

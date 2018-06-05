@@ -11,7 +11,7 @@ import org.ksoap2.transport.HttpTransportSE;
  */
 
 public class UserCreate {
-    public String getRemoteInfo(String userid, String userpwd, String username) {
+    public Boolean getRemoteInfo(String userid, String userpwd, String username) {
         // 命名空间
         String nameSpace = "http://tempuri.org/";
         // 调用的方法名称
@@ -32,18 +32,17 @@ public class UserCreate {
         // 设置是否调用的是dotNet开发的WebService
         envelope.dotNet = true;
         (new MarshalBase64()).register(envelope);
-        // 等价于envelope.bodyOut = rpc;
-        envelope.setOutputSoapObject(rpc);
+        // 等价于envelope.bodyOut = rpc; envelope.setOutputSoapObject(rpc);
         HttpTransportSE transport = new HttpTransportSE(endPoint);
         transport.debug = true;
-        String result = "false";
+        Boolean result = false;
         try {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse()!=null) {
                 System.out.println(envelope.getResponse());
-                result = envelope.getResponse().toString();
-                System.out.print(result);
+                result = (Boolean)envelope.getResponse();
+                System.out.println(result);
                 return result;
             }
         } catch (Exception e) {
@@ -53,7 +52,7 @@ public class UserCreate {
     }
     public static void main(String[] args){
         UserCreate userCreate = new UserCreate();
-        String sign = userCreate.getRemoteInfo("1191583108@qq.com","12345678","goldenboy");
-        System.out.print(sign);
+        Boolean sign = userCreate.getRemoteInfo("306273815@qq.com","12345678","sproutgod");
+        System.out.println(sign);
     }
 }
