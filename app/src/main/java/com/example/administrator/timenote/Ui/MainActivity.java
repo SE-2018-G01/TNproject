@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(MainActivity.this, "是", Toast.LENGTH_SHORT).show();
                             uesrid.requestFocus();
+                            // TODO: 2018/6/6 调用邮箱验证弹框
                         }
                     });
 
