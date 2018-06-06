@@ -7,20 +7,19 @@ import java.util.Date;
  */
 
 public class BeanUserInformation {
-    public static BeanUserInformation currentLoginUser=null;
-    public static BeanUserInformation tryLoginUser=null;
+    public static BeanUserInformation currentLoginUser = null;
+    public static BeanUserInformation tryLoginUser = null;
     private int userid;
     private String username;
     private String userpassword;
     private String useremail;
-    private String drimindid;
-    private Date creatdate;
-    private Date stopdate;
-    private Boolean usercalendar;
+    private int leavesid;
+    private String creatdate;
+    private String stopdate;
+    private String usercalendar;
     private String usertypeface;
-    private int pomoid;
     private int achievement;
-
+    private String authcode;
 
     public int getUserid() {
         return userid;
@@ -54,35 +53,35 @@ public class BeanUserInformation {
         this.useremail = useremail;
     }
 
-    public String getDrimindid() {
-        return drimindid;
+    public int getLeavesid() {
+        return leavesid;
     }
 
-    public void setDrimindid(String drimindid) {
-        this.drimindid = drimindid;
+    public void setLeavesid(int leavesid) {
+        this.leavesid = leavesid;
     }
 
-    public Date getCreatdate() {
+    public String getCreatdate() {
         return creatdate;
     }
 
-    public void setCreatdate(Date creatdate) {
+    public void setCreatdate(String creatdate) {
         this.creatdate = creatdate;
     }
 
-    public Date getStopdate() {
+    public String getStopdate() {
         return stopdate;
     }
 
-    public void setStopdate(Date stopdate) {
+    public void setStopdate(String stopdate) {
         this.stopdate = stopdate;
     }
 
-    public Boolean getUsercalendar() {
+    public String getUsercalendar() {
         return usercalendar;
     }
 
-    public void setUsercalendar(Boolean usercalendar) {
+    public void setUsercalendar(String usercalendar) {
         this.usercalendar = usercalendar;
     }
 
@@ -94,19 +93,19 @@ public class BeanUserInformation {
         this.usertypeface = usertypeface;
     }
 
-    public int getPomoid() {
-        return pomoid;
-    }
-
-    public void setPomoid(int pomoid) {
-        this.pomoid = pomoid;
-    }
-
     public int getAchievement() {
         return achievement;
     }
 
     public void setAchievement(int achievement) {
         this.achievement = achievement;
+    }
+
+    public String getAuthcode() {
+        return authcode;
+    }
+
+    public void setAuthcode(String authcode) {
+        this.authcode = authcode;
     }
 }

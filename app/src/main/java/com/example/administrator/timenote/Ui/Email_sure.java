@@ -1,6 +1,5 @@
 package com.example.administrator.timenote.Ui;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +11,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.administrator.timenote.Manager.UserManager.EmailResend;
+import com.example.administrator.timenote.Manager.UserManager.UserActivity;
+import com.example.administrator.timenote.Manager.UserManager.UserLogin;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
+
 
 
 public class Email_sure extends Dialog {
@@ -66,7 +71,7 @@ public class Email_sure extends Dialog {
             resend=findViewById(R.id.resent_Verification_code_2);
             sure =findViewById(R.id.sure_Verification_code_1);
 
-            //倒计时开始
+            // 倒计时开始
             cdt.start();
 
             // 为按钮绑定点击事件监听器
@@ -77,12 +82,34 @@ public class Email_sure extends Dialog {
                 }
             });
 
-            //确认按钮事件
+            // 确认按钮事件
             sure.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view)
                 {
                     String scode = Verification_code_1.getText().toString();
-                    if(scode.equals("12263"))//验证码验证
+
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            UserLogin userLogin = new UserLogin();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            userLogin.getRemoteInfo(Sign_UpActivity.semail);
+
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(scode.equals(BeanUserInformation.tryLoginUser.getAuthcode()))//验证码验证
                     {
                         issue = true;
                         dismiss();
@@ -94,11 +121,32 @@ public class Email_sure extends Dialog {
                 }
             });
 
-            //重新发送按钮
+            // 重新发送按钮
             resend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //重新发送验证码
+                    Thread f = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            EmailResend emailResend = new EmailResend();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            emailResend.getRemoteInfo(Sign_UpActivity.semail);
+
+                        }
+                    });
+                    f.start();
+                    try {
+                        f.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     resend.setVisibility(View.INVISIBLE);
                     sure.setVisibility(View.VISIBLE);
                     recLen=60;
@@ -106,7 +154,7 @@ public class Email_sure extends Dialog {
                 }
             });
 
-            //验证码输入框
+            // 验证码输入框
             Verification_code_1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -121,8 +169,8 @@ public class Email_sure extends Dialog {
             this.setCancelable(true);
         }
 
-        //倒计时计时3秒，每1秒响应一次
-        CountDownTimer cdt = new CountDownTimer(3000, 1000) {
+        // 倒计时计时60秒，每1秒响应一次
+        CountDownTimer cdt = new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 recLen--;

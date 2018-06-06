@@ -19,6 +19,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.lang.annotation.Target;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.administrator.timenote.Model.BeanUserInformation.tryLoginUser;
@@ -43,47 +44,50 @@ public class UserLogin {
     HttpTransportSE transport = new HttpTransportSE(endPoint);
 
     //创建子线程并引用webservice层的LoadUser方法
-    public void getRemoteInfo(String userid) {
+    public void getRemoteInfo(String useremail) {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
-        rpc.addProperty("useremail", userid);
+        rpc.addProperty("useremail", useremail);
         envelope.bodyOut = rpc;
         // 设置是否调用的是dotNet开发的WebService
         envelope.dotNet = true;
         (new MarshalBase64()).register(envelope);
-        // 等价于envelope.bodyOut = rpc;
-        //envelope.setOutputSoapObject(rpc);
+        // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
         transport.debug = false;
         //Message msg = MainActivity.myHandler.obtainMessage();
         BeanUserInformation u = new BeanUserInformation();
         try {
             transport.call(soapAction, envelope);
-//            if (envelope.getResponse() == null) throw new Base64DataException("没有该用户");
-
+            if (envelope.getResponse() == null) throw new Exception("没有该用户");
             SoapObject result = (SoapObject) envelope.getResponse();
-
-            u.setUseremail(result.getProperty(2).toString());
-            System.out.println(u.getUseremail());
-            u.setUserpassword(result.getProperty(1).toString());
-            System.out.println(u.getUserpassword());
+            u.setUserid(Integer.parseInt(result.getProperty(0).toString()));
+            u.setUsername(result.getProperty(1).toString());
+            //System.out.println(u.getUseremail());
+            u.setUserpassword(result.getProperty(2).toString());
+            //System.out.println(u.getUserpassword());
+            u.setUseremail(result.getProperty(3).toString());
+            u.setCreatdate(result.getProperty(4).toString());
+            u.setStopdate(result.getProperty(5).toString());
+            u.setUsercalendar(result.getProperty(6).toString());
+            u.setUsertypeface(result.getProperty(7).toString());
+            u.setAchievement(Integer.parseInt(result.getProperty(8).toString()));
+            u.setLeavesid(Integer.parseInt(result.getProperty(9).toString()));
+            u.setAuthcode(result.getProperty(10).toString());
             //tryLoginUser = u;
             //msg.what = 1;
            //msg.obj = tryLoginUser;
            // MainActivity.myHandler.sendMessage(msg);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
            // msg.what = 0;
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-            //msg.what = -1;
         }
         BeanUserInformation.tryLoginUser=u;
     }
-//    public static void main(String[] args){
-//        UserLogin userLogin = new UserLogin();
-//        userLogin.getRemoteInfo("306273815@qq.com");
-//        System.out.println(b.getUseremail());
-//        System.out.println(b.getUserpassword());
-//    }
+    public static void main(String[] args){
+        UserLogin userLogin = new UserLogin();
+        userLogin.getRemoteInfo("972357450@qq.com");
+        System.out.println(tryLoginUser.getUseremail());
+        System.out.println(tryLoginUser.getUserpassword());
+    }
 }
