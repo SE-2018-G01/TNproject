@@ -55,6 +55,7 @@
         android:background="#ffffff"
         android:hint="@string/请输入邮箱"
         android:maxLength="40"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,6 +71,7 @@
         android:background="#FFFFFF"
         android:hint="@string/请输入密码"
         android:maxLength="20"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

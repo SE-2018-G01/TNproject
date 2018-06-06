@@ -1,5 +1,6 @@
 package com.example.administrator.timenote.Ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -88,6 +89,7 @@ public class Email_sure extends Dialog {
                 {
                     String scode = Verification_code_1.getText().toString();
 
+                    // 查验证码
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -147,8 +149,8 @@ public class Email_sure extends Dialog {
                         e.printStackTrace();
                     }
 
-                    resend.setVisibility(View.INVISIBLE);
-                    sure.setVisibility(View.VISIBLE);
+//                    resend.setVisibility(View.INVISIBLE);
+//                    sure.setVisibility(View.VISIBLE);
                     recLen=60;
                     cdt.start();
                 }
@@ -165,21 +167,28 @@ public class Email_sure extends Dialog {
                 }
             });
 
-
+            this.setCanceledOnTouchOutside(false);
             this.setCancelable(true);
         }
 
         // 倒计时计时60秒，每1秒响应一次
         CountDownTimer cdt = new CountDownTimer(60000, 1000) {
 
+            @SuppressLint("ResourceAsColor")
             public void onTick(long millisUntilFinished) {
                 recLen--;
-                sure.setText("确认"+recLen+"s");
+                resend.setText("重新发送"+recLen+"s");
+                resend.setClickable(false);
+                resend.setTextColor(R.color.color_ok_2);
             }
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onFinish() {
-                sure.setVisibility(View.INVISIBLE);
-                resend.setVisibility(View.VISIBLE);
+                resend.setText("重新发送");
+                resend.setTextColor(R.color.color_ok_2);
+                resend.setClickable(true);
+//                sure.setVisibility(View.INVISIBLE);
+//                resend.setVisibility(View.VISIBLE);
             }
         };
 }

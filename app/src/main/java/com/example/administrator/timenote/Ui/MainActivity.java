@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.UserManager.UserActivity;
 import com.example.administrator.timenote.Manager.UserManager.UserLogin;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
@@ -34,7 +35,8 @@ import static com.example.administrator.timenote.Model.BeanUserInformation.tryLo
 public class MainActivity extends AppCompatActivity {
 
     private EditText pwd, uesrid;
-    private String suesrid;
+    public static String suesrid;
+    private Button button1;
     public static Handler myHandler;
     //Message msg = new Message();
     //Message msg = myHandler.obtainMessage();
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_layout);
-        final Button button1 = findViewById(R.id.loading_1);
+        button1 = findViewById(R.id.loading_1);
         Button button2 = findViewById(R.id.sign_up_1);
         Button button3 = findViewById(R.id.pwd_change_1);
         pwd = (EditText) findViewById(R.id.pwd_1);
@@ -61,27 +63,27 @@ public class MainActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        //隐藏密码
+        // 隐藏密码
         pwd.setTransformationMethod(PasswordTransformationMethod
                 .getInstance());
-        //密码文本框监听回车
+        // 密码文本框监听回车
         pwd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Toast.makeText(MainActivity.this, "*", Toast.LENGTH_SHORT).show();
+                pwd.clearFocus();
                 return false;
             }
         });
 
-        //用户名文本框监听回车
+        // 用户名文本框监听回车
         uesrid.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Toast.makeText(MainActivity.this, String.valueOf(actionId), Toast.LENGTH_SHORT).show();
+                pwd.requestFocus();
                 return false;
             }
         });
 
-        //登录按钮
+        // 登录按钮
         button1.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("HandlerLeak")
             @Override
@@ -140,20 +142,6 @@ public class MainActivity extends AppCompatActivity {
                     currentLoginUser = tryLoginUser;
                     finish();
                 }
-                else if((!suesrid.equals(tryLoginUser.getUseremail())) || (!spwd.equals(tryLoginUser.getUserpassword())))
-                    {
-                    alterDialog.setTitle("糟糕！");
-                    alterDialog.setMessage("账号或密码错误");
-                    alterDialog.setCancelable(false);
-                    alterDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(MainActivity.this, "确认", Toast.LENGTH_SHORT).show();
-                            uesrid.requestFocus();
-                        }
-                    });
-                    alterDialog.show();
-                }
                 else if((suesrid.equals(""))){
                     alterDialog.setTitle("提示！");
                     alterDialog.setMessage("账号不能为空");
@@ -187,19 +175,64 @@ public class MainActivity extends AppCompatActivity {
                     alterDialog.setPositiveButton("否", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(MainActivity.this, "否", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "尚未激活", Toast.LENGTH_SHORT).show();
                             uesrid.requestFocus();
                         }
                     });
                     alterDialog.setNegativeButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(MainActivity.this, "是", Toast.LENGTH_SHORT).show();
-                            uesrid.requestFocus();
                             // TODO: 2018/6/6 调用邮箱验证弹框
+                            final Email_sure1 email_sure= new Email_sure1(MainActivity.this,R.style.dialog);
+                            email_sure.show();
+                            email_sure.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    if(email_sure.getIssue())
+                                    {
+                                        // 激活
+                                        Thread r = new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // TODO Auto-generated method stub
+                                                UserActivity userActivity = new UserActivity();
+                                                try {
+                                                    Thread.sleep(300);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                userActivity.getRemoteInfo(suesrid);
+
+                                            }
+                                        });
+                                        r.start();
+                                        try {
+                                            r.join(30000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Toast.makeText(MainActivity.this, "用户激活成功", Toast.LENGTH_SHORT).show();
+                                        uesrid.requestFocus();
+                                    }
+                                }
+                            });
                         }
                     });
 
+                    alterDialog.show();
+                }
+                else if((!suesrid.equals(tryLoginUser.getUseremail())) || (!spwd.equals(tryLoginUser.getUserpassword())))
+                {
+                    alterDialog.setTitle("糟糕！");
+                    alterDialog.setMessage("账号或密码错误");
+                    alterDialog.setCancelable(false);
+                    alterDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(MainActivity.this, "确认", Toast.LENGTH_SHORT).show();
+                            uesrid.requestFocus();
+                        }
+                    });
                     alterDialog.show();
                 }
             }

@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.UserManager.EmailResend;
 import com.example.administrator.timenote.Manager.UserManager.UserActivity;
 import com.example.administrator.timenote.Manager.UserManager.UserCreate;
 import com.example.administrator.timenote.Manager.UserManager.UserLogin;
+import com.example.administrator.timenote.Manager.UserManager.UserRollBack;
 import com.example.administrator.timenote.R;
 
 import static com.example.administrator.timenote.Model.BeanUserInformation.tryLoginUser;
@@ -70,9 +72,12 @@ public class Sign_UpActivity extends AppCompatActivity {
                 sname=name.getText().toString();
                 spwd=pwd.getText().toString();
                 String spwd2=pwd2.getText().toString();
+                email.requestFocus();
+                pwd.requestFocus();
+                pwd2.requestFocus();
+                name.requestFocus();
 
-                if(semail.indexOf("@")>0&&spwd.length()>=8&&spwd.equals(spwd2)==true&&tryLoginUser.getUseremail()==null){
-                // 开启子线程进行用户信息预插入
+                if(semail.indexOf("@")>0&&spwd.length()>=8&&spwd.equals(spwd2)==true) {
                 Thread j = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -83,7 +88,7 @@ public class Sign_UpActivity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        judge = userCreate.getRemoteInfo(semail,spwd,sname);
+                        judge = userCreate.getRemoteInfo(semail, spwd, sname);
                     }
                 });
                 j.start();
@@ -93,58 +98,53 @@ public class Sign_UpActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 // 判断预插入成功与否
-                if(judge.equals("false")){
+                if (judge.equals("false")) {
                     // 注册失败提示
                     Toast.makeText(Sign_UpActivity.this, "注册失败,请重试", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
 
-                    final Email_sure email_sure= new Email_sure(Sign_UpActivity.this,R.style.dialog);
-                    // TODO: 2018/6/6 换成登录提示错误的那种弹框 
-                    email_sure.show();
-                    email_sure.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            if(email_sure.getIssue())
-                            {
-                                // 激活
-                                Thread r = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // TODO Auto-generated method stub
-                                        UserActivity userActivity = new UserActivity();
-                                        try {
-                                            Thread.sleep(300);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        userActivity.getRemoteInfo(Sign_UpActivity.semail);
 
-                                    }
-                                });
-                                r.start();
-                                try {
-                                    r.join(30000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                finish();
-                                Toast.makeText(Sign_UpActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                    // 注册账号，返回注册结果
 //                    Intent intent =new Intent(Sign_UpActivity.this,MainActivity.class);
 //                    startActivity(intent);
 //                    finish();
                 }
-               else
-                {
-                    email.requestFocus();
-                    pwd.requestFocus();
-                    pwd2.requestFocus();
-                    name.requestFocus();
+                else {
+                        final Email_sure email_sure = new Email_sure(Sign_UpActivity.this, R.style.dialog);
+                        // TODO: 2018/6/6 换成登录提示错误的那种弹框
+                        email_sure.show();
+                        email_sure.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                if (email_sure.getIssue()) {
+                                    // 激活用户
+                                    Thread r = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // TODO Auto-generated method stub
+                                            UserActivity userActivity = new UserActivity();
+                                            try {
+                                                Thread.sleep(300);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                            userActivity.getRemoteInfo(Sign_UpActivity.semail);
+
+                                        }
+                                    });
+                                    r.start();
+                                    try {
+                                        r.join(30000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    finish();
+                                    Toast.makeText(Sign_UpActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    }
                 }
+
 
             }
         });
@@ -173,10 +173,7 @@ public class Sign_UpActivity extends AppCompatActivity {
                 else {
                     // 此处为失去焦点时的处理内容
                     semail=email.getText().toString();
-                    if(semail.indexOf("@")<0)
-                    {
-                        email_error_1.setVisibility(View.VISIBLE);
-                    }
+
                     // 开启子线程进行邮箱判重
                     Thread t = new Thread(new Runnable() {
                         @Override
@@ -195,7 +192,11 @@ public class Sign_UpActivity extends AppCompatActivity {
                                 public void run() {
                                     // 更新UI
                                     // 提示邮箱是否已经注册
-                                    if(tryLoginUser.getUseremail()!=null)
+                                    if(semail.indexOf("@")<0)
+                                    {
+                                        email_error_1.setVisibility(View.VISIBLE);
+                                    }
+                                    else if(tryLoginUser.getUseremail()!=null&&tryLoginUser.getStopdate().equals("0001-01-01T00:00:00"))
                                         email_error_2.setVisibility(View.VISIBLE);
                                     else
                                         email_remind_1.setVisibility(View.VISIBLE);
@@ -255,4 +256,101 @@ public class Sign_UpActivity extends AppCompatActivity {
             }
         });
     }
+
+//    public void initSignUp(){
+//        //判断是否是注册未激活用户
+//        if(tryLoginUser==null) {
+//            Thread t = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    // TODO Auto-generated method stub
+//                    UserLogin userLogin = new UserLogin();
+//                    try {
+//                        Thread.sleep(300);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    userLogin.getRemoteInfo(semail);
+//                }
+//            });
+//            t.start();
+//            try {
+//                t.join(30000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        else{
+//            if(tryLoginUser.getUseremail()!=null&&tryLoginUser.getStopdate()!=null){
+//                Thread j = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // TODO Auto-generated method stub
+//                        EmailResend emailResend = new EmailResend();
+//                        try {
+//                            Thread.sleep(300);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        emailResend.getRemoteInfo(semail);
+//                    }
+//                });
+//                j.start();
+//                try {
+//                    j.join();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            else {
+//                // 注册账号，返回注册结果
+//                // 开启子线程进行用户信息预插入
+//                Thread j = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // TODO Auto-generated method stub
+//                        UserCreate userCreate = new UserCreate();
+//                        try {
+//                            Thread.sleep(300);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        judge = userCreate.getRemoteInfo(semail,spwd,sname);
+//                    }
+//                });
+//                j.start();
+//                try {
+//                    j.join();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                // 判断预插入成功与否
+//                if(judge.equals("false")){
+//                    // 注册失败提示
+//                    Toast.makeText(Sign_UpActivity.this, "注册失败,请重试", Toast.LENGTH_SHORT).show();
+//                    Thread s = new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // TODO Auto-generated method stub
+//                            UserRollBack userRollBack = new UserRollBack();
+//                            try {
+//                                Thread.sleep(300);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            userRollBack.getRemoteInfo(Sign_UpActivity.semail);
+//
+//                        }
+//                    });
+//                    s.start();
+//                    try {
+//                        s.join(30000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    finish();
+//                }
+//            }
+//        }
+//    }
 }
