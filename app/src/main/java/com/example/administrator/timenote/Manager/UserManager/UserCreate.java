@@ -19,7 +19,7 @@ public class UserCreate {
     String endPoint = "http://39.108.124.121:5818/WebService1.asmx";
     // SOAP Action
     String soapAction = "http://tempuri.org//CreateUser/";
-    HttpTransportSE transport = new HttpTransportSE(endPoint,60000*2);
+    HttpTransportSE transport = new HttpTransportSE(endPoint,60000*5);
     // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
     public String getRemoteInfo(String useremail, String userpwd, String username) {

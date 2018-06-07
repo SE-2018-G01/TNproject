@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //判断账号密码是否匹配，是则进入主界面，否则弹框提示
                 AlertDialog.Builder alterDialog = new AlertDialog.Builder(MainActivity.this);
-                if ((suesrid.equals(tryLoginUser.getUseremail())) && (spwd.equals(tryLoginUser.getUserpassword())) && tryLoginUser.getStopdate().equals("0001-01-01T00:00:00")) {
+                if (((suesrid.equals(tryLoginUser.getUseremail())) && (spwd.equals(tryLoginUser.getUserpassword())) && tryLoginUser.getStopdate().equals("0001-01-01T00:00:00"))) {
                     Intent intent = new Intent(MainActivity.this, Calendar_View.class);
                     startActivity(intent);
                     currentLoginUser = tryLoginUser;
@@ -168,7 +168,20 @@ public class MainActivity extends AppCompatActivity {
                     });
                     alterDialog.show();
                 }
-                else if(!tryLoginUser.getStopdate().equals("0001-01-01T00:00:00")){
+//                else if(tryLoginUser.getUseremail()==null){
+//                    alterDialog.setTitle("提示！");
+//                    alterDialog.setMessage("用户不存在");
+//                    alterDialog.setCancelable(false);
+//                    alterDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Toast.makeText(MainActivity.this, "确认", Toast.LENGTH_SHORT).show();
+//                            uesrid.requestFocus();
+//                        }
+//                    });
+//                    alterDialog.show();
+//                }
+                else if(tryLoginUser.getUseremail()!=null&&!tryLoginUser.getStopdate().equals("0001-01-01T00:00:00")){
                     alterDialog.setTitle("您的账号还未激活");
                     alterDialog.setMessage("是否现在激活");
                     alterDialog.setCancelable(false);
@@ -221,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
                     alterDialog.show();
                 }
-                else if((!suesrid.equals(tryLoginUser.getUseremail())) || (!spwd.equals(tryLoginUser.getUserpassword())))
+                else if((tryLoginUser.getUseremail()==null)||(!suesrid.equals(tryLoginUser.getUseremail())) || (!spwd.equals(tryLoginUser.getUserpassword())))
                 {
                     alterDialog.setTitle("糟糕！");
                     alterDialog.setMessage("账号或密码错误");
