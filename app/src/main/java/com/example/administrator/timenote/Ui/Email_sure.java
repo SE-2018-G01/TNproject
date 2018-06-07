@@ -144,6 +144,8 @@ public class Email_sure extends Dialog {
                     });
                     f.start();
                     try {
+                        recLen=60;
+                        cdt.start();
                         f.join(30000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -151,8 +153,7 @@ public class Email_sure extends Dialog {
 
 //                    resend.setVisibility(View.INVISIBLE);
 //                    sure.setVisibility(View.VISIBLE);
-                    recLen=60;
-                    cdt.start();
+
                 }
             });
 
@@ -179,14 +180,14 @@ public class Email_sure extends Dialog {
                 recLen--;
                 resend.setText("重新发送"+recLen+"s");
                 resend.setClickable(false);
-                resend.setTextColor(R.color.color_ok_2);
+                resend.setTextColor(context.getResources().getColor(R.color.color_ok_2));
             }
             @SuppressLint("ResourceAsColor")
             @Override
             public void onFinish() {
                 resend.setText("重新发送");
-                resend.setTextColor(R.color.color_ok_2);
                 resend.setClickable(true);
+                resend.setTextColor(context.getResources().getColor(R.color.color_ok_1));
 //                sure.setVisibility(View.INVISIBLE);
 //                resend.setVisibility(View.VISIBLE);
             }

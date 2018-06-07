@@ -6,26 +6,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
+
     <include
         android:id="@+id/include"
         layout="@layout/asd" />
+
     <FrameLayout
         android:id="@+id/layout_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
     </FrameLayout>
 
     <EditText
         android:id="@+id/e_mail_1"
+        android:singleLine="true"
         style="@style/ThemeOverlay.AppCompat.Dialog.Alert"
         android:layout_width="210dp"
         android:layout_height="37dp"
         android:layout_marginTop="20dp"
         android:background="#ffffff"
+        android:focusableInTouchMode="true"
         android:hint="@string/请输入邮箱"
         android:maxLength="40"
-        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.752"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,6 +36,7 @@
 
     <EditText
         android:id="@+id/name_1"
+        android:singleLine="true"
         style="@style/ThemeOverlay.AppCompat.Dialog.Alert"
         android:layout_width="210dp"
         android:layout_height="37dp"
@@ -47,6 +51,7 @@
 
     <EditText
         android:id="@+id/pwd_1"
+        android:singleLine="true"
         style="@style/ThemeOverlay.AppCompat.Dialog.Alert"
         android:layout_width="210dp"
         android:layout_height="37dp"
@@ -61,6 +66,7 @@
 
     <EditText
         android:id="@+id/pwd_2"
+        android:singleLine="true"
         style="@style/ThemeOverlay.AppCompat.Dialog.Alert"
         android:layout_width="210dp"
         android:layout_height="37dp"
@@ -110,9 +116,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/none"
-        android:textSize="20sp"
         android:text="@string/已有账号请登录"
         android:textColor="#169BD5"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -272,7 +278,6 @@
         app:layout_constraintHorizontal_bias="0.458"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pwd_2" />
-
 
 
 </android.support.constraint.ConstraintLayout>
