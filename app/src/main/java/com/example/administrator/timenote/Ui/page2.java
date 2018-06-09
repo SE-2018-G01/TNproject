@@ -1,38 +1,27 @@
 package com.example.administrator.timenote.Ui;
 
-import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
-import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class page2 extends Fragment implements OnDateSelectedListener {
     private Button calendar_mode; // 日历模式

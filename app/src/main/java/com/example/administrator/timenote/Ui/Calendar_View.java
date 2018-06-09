@@ -1,35 +1,17 @@
 package com.example.administrator.timenote.Ui;
 
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
 
 import java.util.ArrayList;
@@ -42,8 +24,6 @@ public class Calendar_View extends AppCompatActivity {
     private Button list2;
     private List<View> viewList;//view数组
     private static final String TAG = "LogDemo";
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
     private Button menu;
 
     private List<task> taskList = new ArrayList<task>();//清单列表
@@ -93,6 +73,9 @@ public class Calendar_View extends AppCompatActivity {
                     case R.id.task_1:
                         //点击不同的radioGroup刷新到不同的viewpager
                         viewPager.setCurrentItem(0, false);
+                        if (page1.drawerLayout.isDrawerOpen(page1.navigationView)){
+                            page1.drawerLayout.closeDrawer(page1.navigationView);
+                        }
                         break;
                     case R.id.calendar_1:
                         viewPager.setCurrentItem(1,false);

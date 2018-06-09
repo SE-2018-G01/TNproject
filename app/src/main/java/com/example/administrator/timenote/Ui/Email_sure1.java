@@ -75,6 +75,9 @@ public class Email_sure1 extends Dialog {
         // 倒计时开始
         //cdt.start();
 
+        // 设为蓝色
+        resend.setTextColor(context.getResources().getColor(R.color.color_ok_1));
+
         // 为按钮绑定点击事件监听器
         back.setOnClickListener(new View.OnClickListener(){
             public void onClick(View ciew)
@@ -140,20 +143,20 @@ public class Email_sure1 extends Dialog {
                         }
                         emailResend.getRemoteInfo(MainActivity.suesrid);
 
+                        }
+                    });
+                    f.start();
+                    try {
+                        recLen=60;
+                        cdt.start();
+                        f.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                });
-                f.start();
-                try {
-                    f.join(30000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
 //                resend.setVisibility(View.INVISIBLE);
 //                sure.setVisibility(View.VISIBLE);
-                recLen=60;
-                // 倒计时开始
-                cdt.start();
+
             }
         });
 
@@ -175,19 +178,19 @@ public class Email_sure1 extends Dialog {
     // 倒计时计时60秒，每1秒响应一次
     CountDownTimer cdt = new CountDownTimer(60000, 1000) {
 
-        @SuppressLint("ResourceAsColor")
-        public void onTick(long millisUntilFinished) {
-            recLen--;
-            resend.setText("重新发送"+recLen+"s");
-            resend.setClickable(false);
-            resend.setTextColor(R.color.color_ok_2);
-        }
-        @SuppressLint("ResourceAsColor")
-        @Override
-        public void onFinish() {
-            resend.setText("重新发送");
-            resend.setTextColor(R.color.color_ok_2);
-            resend.setClickable(true);
+            @SuppressLint({"ResourceAsColor", "SetTextI18n"})
+            public void onTick(long millisUntilFinished) {
+                recLen--;
+                resend.setText("重新发送"+recLen+"s");
+                resend.setClickable(false);
+                resend.setTextColor(context.getResources().getColor(R.color.color_ok_2));
+            }
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onFinish() {
+                resend.setText("重新发送");
+                resend.setClickable(true);
+                resend.setTextColor(context.getResources().getColor(R.color.color_ok_1));
 //                sure.setVisibility(View.INVISIBLE);
 //                resend.setVisibility(View.VISIBLE);
         }

@@ -175,7 +175,7 @@ public class Email_sure extends Dialog {
         // 倒计时计时60秒，每1秒响应一次
         CountDownTimer cdt = new CountDownTimer(60000, 1000) {
 
-            @SuppressLint("ResourceAsColor")
+            @SuppressLint({"ResourceAsColor", "SetTextI18n"})
             public void onTick(long millisUntilFinished) {
                 recLen--;
                 resend.setText("重新发送"+recLen+"s");

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
 
 import java.text.SimpleDateFormat;
@@ -69,20 +70,19 @@ public class MyCustomAdapter extends BaseAdapter {
             switch (type) {
                 case TYPE_SEPARATOR:
                     convertView = inflater.inflate(R.layout.item2, null);
-                    holder.date1=convertView .findViewById(R.id.item_2);
-                    holder.t= data.get(position);
+                    holder.date1 = convertView .findViewById(R.id.item_2);
+                    holder.t = data.get(position);
 //                    holder.format=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:SS");
 //                    holder.date1.setText(holder.format.format(holder.t.getDate_1()));
                     break;
 
                 case TYPE_ITEM:
                     convertView = inflater.inflate(R.layout.arrary_button, null);
-                    holder.taskname=convertView .findViewById(R.id.taskname);
-                    holder.date1=convertView .findViewById(R.id.data_1);
-                    holder.view_line=convertView .findViewById(R.id.view_color_1);
-                    holder.taskdes=convertView .findViewById(R.id.taskdes);
-                    holder.taskp=convertView .findViewById(R.id.taskp);
-                    holder.ImageId=convertView .findViewById(R.id.image_level);
+                    holder.taskname = convertView .findViewById(R.id.taskname);
+                    holder.date1 = convertView .findViewById(R.id.data_1);
+                    holder.view_line = convertView .findViewById(R.id.view_color_1);
+                    holder.taskdes = convertView .findViewById(R.id.taskdes);
+                    holder.ImageId = convertView .findViewById(R.id.image_level);
                     break;
 
             }
@@ -90,18 +90,17 @@ public class MyCustomAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.t= data.get(position);
+        holder.t = data.get(position);
         switch (type) {
             case TYPE_SEPARATOR:
-                holder.format=new SimpleDateFormat("yyyy年MM月dd日");
+                holder.format = new SimpleDateFormat("yyyy年MM月dd日");
                 holder.date1.setText(holder.format.format(holder.t.getDate_1()));
                 break;
             case TYPE_ITEM:
                 holder.taskname.setText(holder.t.getTaskname());
-                holder.format=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:SS");
+                holder.format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:SS");
                 holder.date1.setText(holder.format.format(holder.t.getDate_1()));
                 holder.taskdes.setText(holder.t.getTaskdes());
-                holder.taskp.setText(holder.t.getTaskp());
                 holder.ImageId.setImageResource(holder.t.getImageId());
                 break;
         }

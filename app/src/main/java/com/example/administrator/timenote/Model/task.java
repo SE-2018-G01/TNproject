@@ -1,4 +1,4 @@
-package com.example.administrator.timenote.Ui;
+package com.example.administrator.timenote.Model;
 
 import java.util.Date;
 

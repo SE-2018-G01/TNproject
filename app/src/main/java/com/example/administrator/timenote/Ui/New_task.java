@@ -127,12 +127,12 @@ public class New_task extends Dialog {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(TextUtils.isEmpty(task.getText())|task.getText().equals("准备做什么？"))
                 {
-                    sure.setTextColor(R.color.color_ok_2);
+                    sure.setTextColor(context.getResources().getColor(R.color.color_ok_2));
                     sure.setEnabled(Boolean.FALSE);
                 }
                 else
                 {
-                    sure.setTextColor(R.color.color_ok_1);
+                    sure.setTextColor(context.getResources().getColor(R.color.color_ok_1));
                     sure.setEnabled(Boolean.TRUE);
                 }
             }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
@@ -10,53 +12,80 @@
     <View
         android:id="@+id/view_color_1"
         android:layout_width="5dp"
-        android:layout_height="82dp"
+        android:layout_height="80dp"
         android:background="#ff0033"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/taskp1"
+        android:layout_width="330dp"
+        android:layout_height="10dp"
+        android:textColor="#ff0033"
+        app:layout_constraintEnd_toStartOf="@+id/image_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+
+        app:layout_constraintEnd_toStartOf="@+id/taskdes"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskp1" />
 
     <TextView
         android:id="@+id/taskname"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-5dp"
-        android:textSize="20sp" />
+        android:layout_width="295dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/image_level"
+        app:layout_constraintStart_toEndOf="@+id/checkBox"
+        app:layout_constraintTop_toBottomOf="@+id/taskp1" />
 
     <TextView
         android:id="@+id/taskdes"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:layout_marginStart="-301dp"
+        android:layout_marginTop="0dp"
         android:textSize="12sp"
-        android:layout_marginLeft="-301dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.357"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskname" />
 
     <TextView
         android:id="@+id/data_1"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="-301dp"
+        android:layout_height="17dp"
         android:textColor="#ff0033"
-        android:layout_marginLeft="-301dp" />
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/image_level"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/view_color_1"
+        app:layout_constraintTop_toBottomOf="@+id/taskdes" />
+
     <TextView
         android:id="@+id/taskp"
-        android:layout_width="338dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="49dp"
-        android:layout_marginStart="-338dp"
+        android:layout_width="300dp"
+        android:layout_height="10dp"
         android:textColor="#ff0033"
-        android:layout_marginLeft="-338dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.357"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/data_1" />
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="81dp"
-        android:layout_weight="1"
         android:id="@+id/image_level"
-        app:srcCompat="@drawable/level0"
-        android:contentDescription="@string/level" />
-</LinearLayout>
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/level"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/level0" />
+</android.support.constraint.ConstraintLayout>

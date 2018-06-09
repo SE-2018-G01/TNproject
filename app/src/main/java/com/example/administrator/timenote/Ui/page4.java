@@ -28,6 +28,7 @@ import com.bigkoo.pickerview.listener.OnDismissListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +48,7 @@ public class page4 extends Fragment {
     private Spinner time_even_1;// 时间
     private TextView time_text;// 自定义时间提醒框
     private TextView time_even_text;// 自定义频率
+    private TextView user_name_page4;// 用户名显示
     private TextView yezi_time;// 叶子时长
     private TextView yezi_2;// 设置叶子时长
     private yezi_time_select yezi_time_select1;//设置叶子时长界面
@@ -66,8 +68,12 @@ public class page4 extends Fragment {
         time_even_1 = view.findViewById(R.id.time_even_1);
         time_text = view.findViewById(R.id.time_text_1);
         time_even_text = view.findViewById(R.id.retime_text_1);
+        user_name_page4 = view.findViewById(R.id.user_name_page4);
         yezi_time = view.findViewById(R.id.yezi_time);
         yezi_2 = view.findViewById(R.id.yezi_2);
+
+        // 显示用户名
+        user_name_page4.setText(BeanUserInformation.currentLoginUser.getUsername());
 
         //振动按钮
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

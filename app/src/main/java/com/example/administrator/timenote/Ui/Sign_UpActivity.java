@@ -317,7 +317,6 @@ public class Sign_UpActivity extends AppCompatActivity {
             else {
                 dialog.dismiss();
                 final Email_sure email_sure = new Email_sure(Sign_UpActivity.this, R.style.dialog);
-                // TODO: 2018/6/6 换成登录提示错误的那种弹框
                 email_sure.show();
                 email_sure.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
