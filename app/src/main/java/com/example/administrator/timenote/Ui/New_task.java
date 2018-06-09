@@ -294,12 +294,12 @@ public class New_task extends Dialog {
 
             Window dialogWindow = mDialog.getWindow();
             if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
-                dialogWindow.setGravity(Gravity.CENTER);//改成Bottom,底部显示
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);// 修改动画样式
+                dialogWindow.setGravity(Gravity.CENTER); // 改成Bottom,底部显示
             }
         }
     }
-    private String getTime(Date date) {//可根据需要自行截取数据显示
+    private String getTime(Date date) { // 可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return format.format(date);
     }
