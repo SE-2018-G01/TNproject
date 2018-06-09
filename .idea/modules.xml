@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TimeNote.iml" filepath="$PROJECT_DIR$/TimeNote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TNproject.iml" filepath="$PROJECT_DIR$/TNproject.iml" />
+      <module fileurl="file://D:\AndroidStudioProjects\TNproject\TimeNote.iml" filepath="D:\AndroidStudioProjects\TNproject\TimeNote.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\AndroidStudioProjects\TNproject\app\app.iml" filepath="D:\AndroidStudioProjects\TNproject\app\app.iml" />
     </modules>
   </component>
 </project>
