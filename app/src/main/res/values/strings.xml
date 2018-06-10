@@ -90,6 +90,9 @@
     <string name="用户">用户</string>
     <string name="退出登录">退出登录</string>
     <string name="个人中心">个人中心</string>
+    <string name="刷新">刷新</string>
+    <string name="本地">选择本地相册</string>
+    <string name="拍照">拍照</string>
     <string-array name="周期模式1">
         <item>日</item>
         <item>一</item>

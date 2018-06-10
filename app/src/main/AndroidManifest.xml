@@ -9,18 +9,21 @@
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <application
         android:allowBackup="true"
         android:configChanges="orientation|keyboardHidden|screenSize"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <uses-library android:name="android.test.runner" />
-
         <activity android:name=".Ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +38,31 @@
         <activity android:name=".Ui.Mainlist" />
         <activity android:name=".Ui.User_information" />
         <activity android:name=".Ui.Task_Update" />
-        <activity android:name=".Ui.Pesonal"></activity>
+        <activity android:name=".Ui.Pesonal">
+        </activity>
+        <receiver android:name=".Ring.RingReceived">
+            <intent-filter>
+                <action android:name="com.liuqian.android_27alarm.RING"></action>
+            </intent-filter>
+        </receiver>
+        <activity android:name=".Ring.RingActivity">
+        </activity>
+        <receiver android:name=".Ring.MulAppWidgetProvider"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.example.joy.action.CHANGE_IMAGE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/mul_app_widget_provider_info">
+            </meta-data>
+        </receiver>
+
+        <service android:name=".Ring.ListViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false"
+            android:enabled="true"/>
     </application>
 
 </manifest>

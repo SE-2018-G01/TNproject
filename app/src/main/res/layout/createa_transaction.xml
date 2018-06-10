@@ -63,23 +63,23 @@
 
     <Button
         android:id="@+id/task_level_1"
-        android:layout_width="40dp"
+        android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/level0"
-        app:layout_constraintEnd_toStartOf="@+id/back_3"
-        app:layout_constraintHorizontal_bias="0.717"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.41"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view8" />
 
     <Button
         android:id="@+id/task_list_1"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="26dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/menu_list"
-        app:layout_constraintEnd_toStartOf="@+id/task_level_1"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.263"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view8" />
 
@@ -89,8 +89,8 @@
         android:layout_height="30dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/calendar"
-        app:layout_constraintEnd_toStartOf="@+id/task_list_1"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.136"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view8" />
 

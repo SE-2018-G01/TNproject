@@ -2,16 +2,20 @@ package com.example.administrator.timenote.Ui;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.Image;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.example.administrator.timenote.R;
 
@@ -76,6 +80,69 @@ public class User_information extends AppCompatActivity {
                 }
             }
         });
-    }
 
+        // 登出
+        loadout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(User_information.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // 昵称修改
+        name_update.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String sname = name_update.getText().toString();
+                if(hasFocus)
+                {
+
+                }
+                else
+                {
+                        // 修改密码
+
+                    }
+            }
+        });
+
+        // 头像按钮
+        uesr_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu(uesr_image);
+            }
+        });
+
+    }
+    private void showPopupMenu(View view) {
+        // View当前PopupMenu显示的相对View的位置
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        // menu布局
+        popupMenu.getMenuInflater().inflate(R.menu.photo_menu, popupMenu.getMenu());
+        // menu的item点击事件
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.pick:
+                        Toast.makeText(User_information.this,"保存",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.select:
+                        Toast.makeText(User_information.this,"删除",Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                }
+                return true;
+            }
+        });
+        // PopupMenu关闭事件
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            public void onDismiss(PopupMenu menu) {
+            }
+        });
+        popupMenu.show();
+    }
 }

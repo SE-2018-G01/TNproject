@@ -2,6 +2,8 @@ package com.example.administrator.timenote.Ui;
 
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.administrator.timenote.Model.task;
@@ -38,7 +41,38 @@ public class Calendar_View extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 //        initWindow();//影藏最顶层的系统菜单栏
-        radioGroup =findViewById(R.id.rg_group);
+        radioGroup = findViewById(R.id.rg_group);
+        RadioButton yezi = findViewById(R.id.yezi_1);
+        RadioButton calendar = findViewById(R.id.calendar_1);
+        RadioButton task = findViewById(R.id.task_1);
+        RadioButton setup = findViewById(R.id.setup_1);
+            //定义底部标签图片大小和位置
+            Drawable drawable_news = getResources().getDrawable(R.drawable.yezi);
+            //当这个图片被绘制时，给他绑定一个矩形 ltrb规定这个矩形
+            drawable_news.setBounds(0, 0, 95, 95);
+            //设置图片在文字的哪个方向
+            yezi.setCompoundDrawables(null, drawable_news, null, null);
+
+            //定义底部标签图片大小和位置
+            Drawable drawable_live = getResources().getDrawable(R.drawable.calendar);
+            //当这个图片被绘制时，给他绑定一个矩形 ltrb规定这个矩形
+            drawable_live.setBounds(0, 0, 95, 95);
+            //设置图片在文字的哪个方向
+            calendar.setCompoundDrawables(null, drawable_live, null, null);
+
+            //定义底部标签图片大小和位置
+            Drawable drawable_tuijian = getResources().getDrawable(R.drawable.task);
+            //当这个图片被绘制时，给他绑定一个矩形 ltrb规定这个矩形
+            drawable_tuijian.setBounds(0, 0, 100, 100);
+            //设置图片在文字的哪个方向
+            task.setCompoundDrawables(null, drawable_tuijian, null, null);
+
+            //定义底部标签图片大小和位置
+            Drawable drawable_me = getResources().getDrawable(R.drawable.setup);
+            //当这个图片被绘制时，给他绑定一个矩形 ltrb规定这个矩形
+            drawable_me.setBounds(0, 0, 100, 100);
+            //设置图片在文字的哪个方向
+            setup.setCompoundDrawables(null, drawable_me, null, null);
         radioGroup.check(R.id.task_1);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_1);

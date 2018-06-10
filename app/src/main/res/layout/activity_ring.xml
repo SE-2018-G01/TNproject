@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_ring"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:excludeFromRecents="true"
+    android:launchMode="singleInstance"
+    android:taskAffinity=""
+    android:configChanges="orientation|keyboardHidden|keyboard|navigation"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="哦多可，你再不起床你就要丢掉这一天最美好的早晨了哦"
+        android:textColor="#aabbcc"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stop"
+        android:text="停止"/>
+
+</LinearLayout>

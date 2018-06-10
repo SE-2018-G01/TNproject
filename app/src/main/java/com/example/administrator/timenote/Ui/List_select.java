@@ -100,7 +100,6 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
             default:
                 break;
         }
-
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

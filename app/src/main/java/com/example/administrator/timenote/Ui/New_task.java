@@ -43,8 +43,8 @@ public class New_task extends Dialog {
     private Button dateselect; // 日期选择按钮
     private Button list; // 清单选择按钮
     private Button level; // 优先级选择按钮
-    private Level_select level_select;//优先级选择界面
-    private TimePickerView pvTime, pvCustomTime;//时间选择界面
+    private Level_select level_select;// 优先级选择界面
+    private TimePickerView pvTime, pvCustomTime;// 时间选择界面
     private Button sure; // 确定按钮
     public EditText task; // 任务输入框
     public String getdate;
@@ -187,7 +187,7 @@ public class New_task extends Dialog {
         pvCustomTime = new TimePickerBuilder(context, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                getdate = getTime(date);
+               getdate = getTime(date);
             }
         })
                 .setDate(selectedDate)

@@ -3,6 +3,7 @@ package com.example.administrator.timenote.Ui;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -49,6 +51,7 @@ public class page4 extends Fragment {
     private TextView time_text;// 自定义时间提醒框
     private TextView time_even_text;// 自定义频率
     private TextView user_name_page4;// 用户名显示
+    private Button user_psonal_button;// 个人中心
     private TextView yezi_time;// 叶子时长
     private TextView yezi_2;// 设置叶子时长
     private yezi_time_select yezi_time_select1;//设置叶子时长界面
@@ -56,7 +59,7 @@ public class page4 extends Fragment {
 
 
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.page4, container, false);
 
@@ -69,11 +72,21 @@ public class page4 extends Fragment {
         time_text = view.findViewById(R.id.time_text_1);
         time_even_text = view.findViewById(R.id.retime_text_1);
         user_name_page4 = view.findViewById(R.id.user_name_page4);
+        user_psonal_button = view.findViewById(R.id.user_psonal_button);
         yezi_time = view.findViewById(R.id.yezi_time);
         yezi_2 = view.findViewById(R.id.yezi_2);
 
         // 显示用户名
         user_name_page4.setText(BeanUserInformation.currentLoginUser.getUsername());
+
+        // 头像按钮
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getContext(),User_information.class);
+                startActivity(intent1);
+            }
+        });
 
         //振动按钮
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -101,6 +114,15 @@ public class page4 extends Fragment {
                             yezi_time.setText(yezi_time_select1.getYezi_time()+"分钟");
                     }
                 });
+            }
+        });
+
+        // 进入个人中心
+        user_psonal_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),Pesonal.class);
+                startActivity(intent);
             }
         });
 

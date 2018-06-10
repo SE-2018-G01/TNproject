@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/save"
+        android:id="@+id/pick"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/保存" />
+        android:title="@string/拍照" />
 
 
     <item
-        android:id="@+id/delete"
+        android:id="@+id/select"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/删除" />
+        android:title="@string/本地" />
 
 </menu>

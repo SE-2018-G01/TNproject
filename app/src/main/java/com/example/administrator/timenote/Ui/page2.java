@@ -1,5 +1,7 @@
 package com.example.administrator.timenote.Ui;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -23,12 +26,13 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.Calendar;
 
-public class page2 extends Fragment implements OnDateSelectedListener {
+public class page2 extends Fragment implements OnDateSelectedListener, AdapterView.OnItemClickListener, ListAdapter.InnerItemOnclickListener{
     private Button calendar_mode; // 日历模式
     private Calendar calendar;// 获取当前时间用
     private LayoutInflater inflater1;
     private ListView listView;// 事务列表
     private Button list1; // 菜单按钮
+    private Level_select level_select;// 优先级选择界面
     private MenuItem gMenuItem1, gMenuItem2;// list2的两个按钮
     private Button new_button;// 新建事务
     private static boolean stase1 = true, stase2 = false;// 列表显示状态
@@ -59,6 +63,8 @@ public class page2 extends Fragment implements OnDateSelectedListener {
                 adapter.addItem(b);
             }
         }
+        adapter.setOnInnerItemOnClickListener(this);
+        listView.setOnItemClickListener(this);
 
         //顶层菜单栏
         //日历视图模式转换
@@ -85,6 +91,7 @@ public class page2 extends Fragment implements OnDateSelectedListener {
 
                 }
             });
+
        widget.setOnDateChangedListener(this);
 
        //回到今天按钮
@@ -189,5 +196,38 @@ public class page2 extends Fragment implements OnDateSelectedListener {
             }
         });
         popupMenu.show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getContext(),"列表 "+position+" 被点击了",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void itemClick(View v) {
+        int position;
+        position = (Integer) v.getTag();
+        switch (v.getId()) {
+            case R.id.taskdes:
+            case R.id.data_1:
+            case R.id.taskname:
+                Intent intent = new Intent(getContext(), Task_Update.class);
+                intent.putExtra("taskname", "打人");
+                getContext().startActivity(intent);
+                Toast.makeText(getContext(), "an", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.image_level:
+                level_select=new Level_select(getContext(),R.style.dialog);
+                level_select.show();
+                // 监听弹框消失
+                level_select.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                    }
+                });
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -15,14 +15,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class MyCustomAdapter extends BaseAdapter {
+public class MyCustomAdapter extends BaseAdapter implements View.OnClickListener{
 
+    private ArrayList<task> data = new ArrayList<>();
+    private LayoutInflater inflater;
+    private ListAdapter.InnerItemOnclickListener mListener;
+    private TreeSet<Integer> set = new TreeSet<Integer>();
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_SEPARATOR = 1;
     private static final int TYPE_MAX_COUNT = TYPE_SEPARATOR + 1;
-    private ArrayList<task> data = new ArrayList<>();
-    private LayoutInflater inflater;
-    private TreeSet<Integer> set = new TreeSet<Integer>();
+
 
     public MyCustomAdapter(Context context) {
         inflater = LayoutInflater.from(context);
@@ -98,15 +100,40 @@ public class MyCustomAdapter extends BaseAdapter {
                 break;
             case TYPE_ITEM:
                 holder.taskname.setText(holder.t.getTaskname());
+                holder.taskname.setOnClickListener(this);
+                holder.taskname.setTag(position);
+
                 holder.format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:SS");
                 holder.date1.setText(holder.format.format(holder.t.getDate_1()));
+                holder.date1.setOnClickListener(this);
+                holder.date1.setTag(position);
+
                 holder.taskdes.setText(holder.t.getTaskdes());
+                holder.taskdes.setOnClickListener(this);
+                holder.taskdes.setTag(position);
+
                 holder.ImageId.setImageResource(holder.t.getImageId());
+                holder.ImageId.setOnClickListener(this);
+                holder.ImageId.setTag(position);
+
                 break;
         }
 
 
         return convertView;
+    }
+
+    interface InnerItemOnclickListener {
+        void itemClick(View v);
+    }
+
+    public void setOnInnerItemOnClickListener(ListAdapter.InnerItemOnclickListener listener){
+        this.mListener=listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mListener.itemClick(v);
     }
 
     public static class ViewHolder {

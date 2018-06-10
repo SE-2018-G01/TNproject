@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         pwd = (EditText) findViewById(R.id.pwd_1);
         uesrid = (EditText) findViewById(R.id.userid_1);
 
-
         //强制竖屏
         {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
