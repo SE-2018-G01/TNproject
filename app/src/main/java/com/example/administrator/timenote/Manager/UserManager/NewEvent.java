@@ -1,5 +1,6 @@
 package com.example.administrator.timenote.Manager.UserManager;
 
+import com.example.administrator.timenote.Model.BeanEventInformation;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 
 import org.ksoap2.SoapEnvelope;
@@ -30,7 +31,7 @@ public class NewEvent {
     HttpTransportSE transport = new HttpTransportSE(endPoint);
 
     //创建子线程并引用webservice层的LoadUser方法
-    public String getRemoteInfo(String eventname,int eventpriority, int listid, Date eventdate) {
+    public String getRemoteInfo(String eventname,int eventpriority, int listid, String eventdate) {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
@@ -55,5 +56,10 @@ public class NewEvent {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static void main(String[] args){
+        NewEvent newEvent = new NewEvent();
+        newEvent.getRemoteInfo("旅游",1,0,"2018-09-19 09:30");
     }
 }

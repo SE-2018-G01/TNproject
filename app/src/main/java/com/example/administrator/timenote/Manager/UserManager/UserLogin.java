@@ -63,9 +63,7 @@ public class UserLogin {
             SoapObject result = (SoapObject) envelope.getResponse();
             u.setUserid(Integer.parseInt(result.getProperty(0).toString()));
             u.setUsername(result.getProperty(1).toString());
-            //System.out.println(u.getUseremail());
             u.setUserpassword(result.getProperty(2).toString());
-            //System.out.println(u.getUserpassword());
             u.setUseremail(result.getProperty(3).toString());
             u.setCreatdate(result.getProperty(4).toString());
             u.setStopdate(result.getProperty(5).toString());
