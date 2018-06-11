@@ -16,7 +16,7 @@ public class BeanUserInformation {
     private int leavesid;
     private String creatdate;
     private String stopdate;
-    private String usercalendar;
+    private String usercalendar; // 数据库存储形式为Boolean
     private String usertypeface;
     private int achievement;
     private String authcode;

@@ -49,6 +49,8 @@ public class New_task extends Dialog {
     public EditText task; // 任务输入框
     public String getdate;
 
+    private int priority = 0;
+
     public New_task(Context context) {
         super(context);
         this.context = context;
@@ -97,8 +99,9 @@ public class New_task extends Dialog {
             public void onClick(View view) {
                 // 获取事务信息
                 String scode = task.getText().toString();
-                Date date;
-                int listid;
+                Date date = null;
+                int listid = 0;
+                initsure(scode,priority,listid,date);
                 dismiss();
             }
         });
@@ -170,15 +173,19 @@ public class New_task extends Dialog {
         {
             case 0:
                 level.setBackgroundResource(R.drawable.level0);
+                priority = 1;
                 break;
             case 1:
                 level.setBackgroundResource(R.drawable.level1);
+                priority = 2;
                 break;
             case 2:
                 level.setBackgroundResource(R.drawable.level2);
+                priority = 3;
                 break;
             case 3:
                 level.setBackgroundResource(R.drawable.level3);
+                priority = 4;
                 break;
         }
     }
@@ -303,4 +310,9 @@ public class New_task extends Dialog {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return format.format(date);
     }
+
+    private void initsure(String scode, int priority, int listid, Date eventdate){
+        // TODO: 2018/6/11 调用NewEvent类中的方法插入新事务 
+    }
+
 }
