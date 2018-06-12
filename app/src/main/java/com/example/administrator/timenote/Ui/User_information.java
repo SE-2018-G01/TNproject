@@ -127,9 +127,7 @@ public class User_information extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.pick:
-                        Toast.makeText(User_information.this,"保存",Toast.LENGTH_SHORT).show();
-                        break;
+
                     case R.id.select:
                         Toast.makeText(User_information.this,"删除",Toast.LENGTH_SHORT).show();
                         break;

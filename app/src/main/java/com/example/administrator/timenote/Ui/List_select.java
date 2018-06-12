@@ -1,7 +1,9 @@
 package com.example.administrator.timenote.Ui;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -24,6 +26,7 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
     private ListAdapter listAdapter;// 清单列表适配器
     private ListView listView;// 清单列表
     private ArrayList<String> listname;// 清单名称列表
+    private New_List new_list;// 新建清单;
 
     public static String getNlistname() {
         return nlistname;
@@ -68,7 +71,7 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
             listname.add("清单");
         }
         listname.add("添加清单");
-        listView =findViewById(R.id.listView3);
+        listView = findViewById(R.id.listView3);
         listAdapter=new ListAdapter(context,R.layout.list_button,listname);
         listAdapter.setOnInnerItemOnClickListener(this);
         listView.setAdapter(listAdapter);
@@ -93,9 +96,26 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
         position = (Integer) v.getTag();
         switch (v.getId()) {
             case R.id.list_select_button:
-                nlistname=listname.get(position);
-                dismiss();
-                Toast.makeText(context,"an",Toast.LENGTH_SHORT).show();
+                nlistname = listname.get(position);
+                if(nlistname.equals("添加清单"))
+                {
+                    new_list = new New_List(getContext(),R.style.dialog);
+                    new_list.show();
+                    new_list.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    public void onDismiss(DialogInterface dialog) {
+                        if(new_list.getIssue())
+                        {
+                            nlistname = new_list.getList_name();
+                            Toast.makeText(context,nlistname,Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                }
+                else{
+                    dismiss();
+                    Toast.makeText(context,nlistname,Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
                 break;

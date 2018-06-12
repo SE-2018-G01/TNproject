@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <uses-library android:name="android.test.runner" />
+
         <activity android:name=".Ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,31 +39,36 @@
         <activity android:name=".Ui.Mainlist" />
         <activity android:name=".Ui.User_information" />
         <activity android:name=".Ui.Task_Update" />
-        <activity android:name=".Ui.Pesonal">
-        </activity>
+        <activity android:name=".Ui.Pesonal"></activity>
+
         <receiver android:name=".Ring.RingReceived">
             <intent-filter>
-                <action android:name="com.liuqian.android_27alarm.RING"></action>
+                <action android:name="com.liuqian.android_27alarm.RING" />
             </intent-filter>
-        </receiver>
-        <activity android:name=".Ring.RingActivity">
-        </activity>
-        <receiver android:name=".Ring.MulAppWidgetProvider"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="com.example.joy.action.CHANGE_IMAGE"/>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/mul_app_widget_provider_info">
-            </meta-data>
         </receiver>
 
-        <service android:name=".Ring.ListViewService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
+        <activity android:name=".Ring.RingActivity"></activity>
+
+        <receiver
+            android:name=".Ring.MulAppWidgetProvider"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.example.joy.action.CHANGE_IMAGE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/mul_app_widget_provider_info"></meta-data>
+        </receiver>
+
+        <service
+            android:name=".Ring.ListViewService"
+            android:enabled="true"
             android:exported="false"
-            android:enabled="true"/>
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".Ui.List_Update"></activity>
     </application>
 
 </manifest>

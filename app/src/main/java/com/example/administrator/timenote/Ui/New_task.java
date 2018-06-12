@@ -97,7 +97,7 @@ public class New_task extends Dialog {
 
         //确认按钮事件
         sure.setEnabled(Boolean.FALSE);
-        sure.setTextColor(R.color.color_ok_2);
+        sure.setTextColor(context.getResources().getColor(R.color.color_ok_2));
         sure.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // 获取事务信息

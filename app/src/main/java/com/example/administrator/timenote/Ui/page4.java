@@ -64,17 +64,17 @@ public class page4 extends Fragment {
         View view = inflater.inflate(R.layout.page4, container, false);
 
         // 对应控件
-        imageButton1 = view.findViewById(R.id.imageButton);
-        switch1 = view.findViewById(R.id.switch1);
-        time_select_1 = view.findViewById(R.id.time_select_1);
-        time_ring_1 = view.findViewById(R.id.time_ring_1);
-        time_even_1 = view.findViewById(R.id.time_even_1);
-        time_text = view.findViewById(R.id.time_text_1);
-        time_even_text = view.findViewById(R.id.retime_text_1);
-        user_name_page4 = view.findViewById(R.id.user_name_page4);
-        user_psonal_button = view.findViewById(R.id.user_psonal_button);
-        yezi_time = view.findViewById(R.id.yezi_time);
-        yezi_2 = view.findViewById(R.id.yezi_2);
+        imageButton1 = view.findViewById(R.id.imageButton); // 头像按钮
+        switch1 = view.findViewById(R.id.switch1);// 振动开关
+        time_select_1 = view.findViewById(R.id.time_select_1);// 时间选择
+        time_ring_1 = view.findViewById(R.id.time_ring_1);// 闹铃选择
+        time_even_1 = view.findViewById(R.id.time_even_1);// 重复选择
+        time_text = view.findViewById(R.id.time_text_1);// 自定义时间显示
+        time_even_text = view.findViewById(R.id.retime_text_1);// 重复选择存储文本
+        user_name_page4 = view.findViewById(R.id.user_name_page4);// 用户名文本
+        user_psonal_button = view.findViewById(R.id.user_psonal_button);//
+        yezi_time = view.findViewById(R.id.yezi_time);// 叶子时间选择
+        yezi_2 = view.findViewById(R.id.yezi_2);// 叶子时间显示
 
         // 显示用户名
         if(!BeanUserInformation.currentLoginUser.getUsername().equals("anyType{}"))
@@ -128,7 +128,7 @@ public class page4 extends Fragment {
         });
 
         // 时间选择列表
-        adapter_time=ArrayAdapter.createFromResource(getContext(),R.array.time_select,android.R.layout.simple_spinner_item);
+        adapter_time = ArrayAdapter.createFromResource(getContext(),R.array.time_select,android.R.layout.simple_spinner_item);
         adapter_time.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         time_select_1.setAdapter(adapter_time);
         time_select_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-
+        Intent intent = new Intent(MainActivity.this, Calendar_View.class);
+        startActivity(intent);
         // 隐藏密码
         pwd.setTransformationMethod(PasswordTransformationMethod
                 .getInstance());

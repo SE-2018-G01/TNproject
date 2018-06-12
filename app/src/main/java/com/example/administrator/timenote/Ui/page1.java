@@ -1,24 +1,36 @@
 package com.example.administrator.timenote.Ui;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Model.List_menu;
 import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class page1  extends Fragment implements AdapterView.OnItemClickListener, ListAdapter.InnerItemOnclickListener{
 
@@ -27,7 +39,10 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     private LayoutInflater inflater;// 接口
     private Button list1, taday_1, all_1, list2;// 任务列表（page1）的按钮从右到左
     private TextView list_name_1;// 清单名称
+    private ListView list_menu;// 清单列表
+    private List<List_menu> list;
     private Level_select level_select;// 优先级选择界面
+    private New_List new_list;// 新建清单
     public static NavigationView navigationView;
     private Button new_button;// 新建事务
     private static boolean stase1 = true, stase2 = false;// 列表显示状态
@@ -38,6 +53,8 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         View view = inflater.inflate(R.layout.page1, container, false);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.page1);
         navigationView = (NavigationView)view.findViewById(R.id.nav);
+        list_menu = view.findViewById(R.id.list_menu_list);
+        inindrawer("lzc");
         View headerView = navigationView.getHeaderView(0);//获取头布局
         new_button=view.findViewById(R.id.new_task2);
 
@@ -201,10 +218,61 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                     }
                 });
                 break;
+            case R.id.list_menu_name:
+            case R.id.imageView4:
+                String name = list.get(position).getList_menu_name();
+                if(name.equals("添加清单"))
+                {
+                    new_list = new New_List(getContext(),R.style.dialog);
+                    new_list.show();
+                    new_list.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        public void onDismiss(DialogInterface dialog) {
+                            if (new_list.getIssue()) {
+                                Toast.makeText(getContext(), new_list.getList_name(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
+                else if(name.equals("设置清单")){
+                    Intent intent1 = new Intent(getContext(),List_Update.class);
+                    startActivity(intent1);
+                }
+                else {
+                    inindrawer("lml");
+                }
+
+                break;
             default:
                 break;
         }
     }
+    public void inindrawer(String name){
+        list = new ArrayList<>();
+        Bitmap bmp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.menu_list);
+        List_menu list_menu_item = new List_menu(bmp,"所有");
+        list.add(list_menu_item);
+        list_menu_item = new List_menu(bmp,"今天");
+        list.add(list_menu_item);
+        list_menu_item = new List_menu(bmp,"近三天");
+        list.add(list_menu_item);
+        list_menu_item = new List_menu(bmp,"收集箱");
+        list.add(list_menu_item);
+        for(int i=0;i<10;i++){
+            list_menu_item = new List_menu(bmp,name+i);
+            list.add(list_menu_item);
+        }
+        bmp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.plus);
+        list_menu_item = new List_menu(bmp,"新建清单");
+        list.add(list_menu_item);
+        bmp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.setup1);
+        list_menu_item = new List_menu(bmp,"设置清单");
+        list.add(list_menu_item);
 
+        List_menu_Adapter list_menu_adapter = new List_menu_Adapter(this.getContext(),R.layout.list_menu_button,list);
+        list_menu.setAdapter(list_menu_adapter);
+        list_menu_adapter.setOnInnerItemOnClickListener(this);
+        list_menu.setOnItemClickListener(this);
+    }
 }
 

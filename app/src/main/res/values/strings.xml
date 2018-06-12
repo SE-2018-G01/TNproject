@@ -93,6 +93,12 @@
     <string name="刷新">刷新</string>
     <string name="本地">选择本地相册</string>
     <string name="拍照">拍照</string>
+    <string name="请输入清单名">请输入清单名</string>
+    <string name="添加清单">添加清单</string>
+    <string name="清单名字">清单名字</string>
+    <string name="清单设置">清单设置</string>
+    <string name="修改亲的干">修改清单</string>
+    <string name="请选择重复">请选择重复</string>
     <string-array name="周期模式1">
         <item>日</item>
         <item>一</item>
@@ -124,9 +130,8 @@
         <item>从不</item>
         <item>每天</item>
         <item>每周工作日（周一至周五）</item>
-        <item>每六</item>
+        <item>每周六</item>
         <item>每月（当天）</item>
         <item>每年（当天）</item>
-        <item>自定义</item>
     </string-array>
 </resources>

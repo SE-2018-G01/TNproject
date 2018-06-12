@@ -49,10 +49,25 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/head"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/new_menu">
+        >
+
+        <include
+            android:id="@+id/user_head"
+            layout="@layout/head"
+            android:layout_height="200dp"
+            android:layout_width="match_parent">
+        </include>
+
+        <ListView
+            android:id="@+id/list_menu_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            tools:ignore="MissingConstraints">
+        </ListView>
+
     </android.support.design.widget.NavigationView>
 
 

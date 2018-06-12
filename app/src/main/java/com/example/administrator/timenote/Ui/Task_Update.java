@@ -28,6 +28,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.timenote.R;
 
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -117,7 +118,14 @@ public class Task_Update extends AppCompatActivity {
         rering_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Rering_setup rering_setup = new Rering_setup(Task_Update.this,R.style.dialog);
+                rering_setup.show();
+                rering_setup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
 
+                    }
+                });
             }
         });
 
