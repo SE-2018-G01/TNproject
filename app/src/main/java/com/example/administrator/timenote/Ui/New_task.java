@@ -26,6 +26,7 @@ import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.administrator.timenote.Manager.UserManager.NewEvent;
 import com.example.administrator.timenote.R;
 
 import org.w3c.dom.Text;
@@ -47,7 +48,11 @@ public class New_task extends Dialog {
     private TimePickerView pvTime, pvCustomTime;// 时间选择界面
     private Button sure; // 确定按钮
     public EditText task; // 任务输入框
-    public String getdate;
+    public String getdate; // 事务时间获取
+    public String scode; // 事务名称获取
+    public int listid = 0; //清单id获取
+
+    private int priority = 0;
 
     public New_task(Context context) {
         super(context);
@@ -96,9 +101,8 @@ public class New_task extends Dialog {
         sure.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // 获取事务信息
-                String scode = task.getText().toString();
-                Date date;
-                int listid;
+                scode = task.getText().toString();
+                initsure();
                 dismiss();
             }
         });
@@ -170,15 +174,19 @@ public class New_task extends Dialog {
         {
             case 0:
                 level.setBackgroundResource(R.drawable.level0);
+                priority = 0;
                 break;
             case 1:
                 level.setBackgroundResource(R.drawable.level1);
+                priority = 1;
                 break;
             case 2:
                 level.setBackgroundResource(R.drawable.level2);
+                priority = 2;
                 break;
             case 3:
                 level.setBackgroundResource(R.drawable.level3);
+                priority = 3;
                 break;
         }
     }
@@ -303,4 +311,28 @@ public class New_task extends Dialog {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return format.format(date);
     }
+
+    private void initsure(){
+        // TODO: 2018/6/11 调用NewEvent类中的方法插入新事务
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                NewEvent newEvent = new NewEvent();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                newEvent.getRemoteInfo(scode,priority,listid,getdate);
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

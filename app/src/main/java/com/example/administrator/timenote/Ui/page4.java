@@ -77,7 +77,8 @@ public class page4 extends Fragment {
         yezi_2 = view.findViewById(R.id.yezi_2);
 
         // 显示用户名
-        user_name_page4.setText(BeanUserInformation.currentLoginUser.getUsername());
+        if(!BeanUserInformation.currentLoginUser.getUsername().equals("anyType{}"))
+            user_name_page4.setText(BeanUserInformation.currentLoginUser.getUsername());
 
         // 头像按钮
         imageButton1.setOnClickListener(new View.OnClickListener() {
