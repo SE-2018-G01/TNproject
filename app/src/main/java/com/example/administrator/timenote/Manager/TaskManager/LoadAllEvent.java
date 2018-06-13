@@ -45,7 +45,6 @@ public class LoadAllEvent {
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
         transport.debug = true;
-        //Message msg = MainActivity.myHandler.obtainMessage();
         List<BeanEventInformation> eventInformationList = new ArrayList<BeanEventInformation>();
         try {
             transport.call(soapAction, envelope);

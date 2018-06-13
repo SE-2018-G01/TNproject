@@ -54,11 +54,15 @@ public class UserLogin {
         envelope.dotNet = true;
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
-        transport.debug = false;
+        transport.debug = true;
         //Message msg = MainActivity.myHandler.obtainMessage();
         BeanUserInformation u = new BeanUserInformation();
         try {
             transport.call(soapAction, envelope);
+            String a = transport.requestDump;
+            System.out.println(a);
+            String b =  transport.responseDump;
+            System.out.println(b);
             if (envelope.getResponse() == null) throw new Exception("没有该用户");
             SoapObject result = (SoapObject) envelope.getResponse();
             u.setUserid(Integer.parseInt(result.getProperty(0).toString()));
