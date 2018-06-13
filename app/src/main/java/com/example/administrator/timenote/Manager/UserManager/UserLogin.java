@@ -72,13 +72,8 @@ public class UserLogin {
             u.setAchievement(Integer.parseInt(result.getProperty(8).toString()));
             u.setLeavesid(Integer.parseInt(result.getProperty(9).toString()));
             u.setAuthcode(result.getProperty(10).toString());
-            //tryLoginUser = u;
-            //msg.what = 1;
-           //msg.obj = tryLoginUser;
-           // MainActivity.myHandler.sendMessage(msg);
         } catch (Exception e) {
             e.printStackTrace();
-           // msg.what = 0;
         }
         BeanUserInformation.tryLoginUser=u;
     }

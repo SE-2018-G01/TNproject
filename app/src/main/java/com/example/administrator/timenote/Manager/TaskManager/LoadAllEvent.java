@@ -1,11 +1,9 @@
-package com.example.administrator.timenote.Manager.UserManager;
+package com.example.administrator.timenote.Manager.TaskManager;
 
 import com.example.administrator.timenote.Model.BeanEventInformation;
-import com.example.administrator.timenote.Model.BeanUserInformation;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.MarshalBase64;
-import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
@@ -33,7 +31,7 @@ public class LoadAllEvent {
     // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
 
-    HttpTransportSE transport = new HttpTransportSE(endPoint);
+    HttpTransportSE transport = new HttpTransportSE(endPoint,60000*5);
 
     //创建子线程并引用webservice层的LoadUser方法
     public List<BeanEventInformation> getRemoteInfo(int userid) {
@@ -46,13 +44,17 @@ public class LoadAllEvent {
         envelope.dotNet = true;
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
-        transport.debug = false;
+        transport.debug = true;
         //Message msg = MainActivity.myHandler.obtainMessage();
         List<BeanEventInformation> eventInformationList = new ArrayList<BeanEventInformation>();
         try {
             transport.call(soapAction, envelope);
+            String a = transport.requestDump;
+            System.out.println(a);
+            String b =  transport.responseDump;
+            System.out.println(b);
             SoapObject result = (SoapObject) envelope.bodyIn;
-            SoapObject detail = (SoapObject) result.getProperty(methodName);
+            SoapObject detail = (SoapObject) result.getProperty(methodName+"Result");
             for (int j = 0; j < detail.getPropertyCount(); j++) {
                 BeanEventInformation e = new BeanEventInformation();
                 SoapObject mstr = (SoapObject) detail.getProperty(j);

@@ -11,11 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.administrator.timenote.Manager.UserManager.EmailResend;
-import com.example.administrator.timenote.Manager.UserManager.UserLogin;
-import com.example.administrator.timenote.Model.BeanUserInformation;
+import com.example.administrator.timenote.Manager.TaskManager.NewList;
 import com.example.administrator.timenote.R;
 
 public class New_List extends Dialog {
@@ -83,6 +80,27 @@ public class New_List extends Dialog {
         sure.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 issue = true;
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        NewList newList = new NewList();
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        newList.getRemoteInfo(list_name);
+
+                    }
+                });
+                t.start();
+                try {
+                    t.join(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //list_name;
                 dismiss();
 
             }
