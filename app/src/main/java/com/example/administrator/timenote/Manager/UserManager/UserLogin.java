@@ -76,6 +76,7 @@ public class UserLogin {
             u.setAchievement(Integer.parseInt(result.getProperty(8).toString()));
             u.setLeavesid(Integer.parseInt(result.getProperty(9).toString()));
             u.setAuthcode(result.getProperty(10).toString());
+            u.setIcon(result.getProperty(11).toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
