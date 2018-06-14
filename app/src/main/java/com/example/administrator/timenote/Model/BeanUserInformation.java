@@ -20,6 +20,17 @@ public class BeanUserInformation {
     private String usertypeface;
     private int achievement;
     private String authcode;
+    private byte[] icon;// 头像
+
+    public byte[] getIcon() {
+        return icon;
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
+    }
+
+
 
     public int getUserid() {
         return userid;

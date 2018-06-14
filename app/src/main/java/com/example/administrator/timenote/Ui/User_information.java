@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -17,7 +21,15 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
+import com.liuguangqiang.ipicker.IPicker;
+import com.liuguangqiang.ipicker.events.IPickerEvent;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User_information extends AppCompatActivity {
 
@@ -25,7 +37,8 @@ public class User_information extends AppCompatActivity {
     private EditText email_update;// 邮箱
     private Button loadout;// 登出
     private EditText name_update;// 昵称
-    private ImageView uesr_image;// 用户头像
+    public static ImageView uesr_image;// 用户头像
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,38 +122,30 @@ public class User_information extends AppCompatActivity {
         });
 
         // 头像按钮
+        if(BeanUserInformation.currentLoginUser.getIcon()!=null)
+        {
+            Bitmap bm;
+            byte[] bitmapByte = BeanUserInformation.currentLoginUser.getIcon();
+            if (bitmapByte.length != 0) {
+                bm = BitmapFactory.decodeByteArray(bitmapByte, 0,bitmapByte.length);
+                uesr_image.setImageBitmap(bm);
+            } else {
+
+            }
+        }
         uesr_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupMenu(uesr_image);
+                Intent intent = new Intent(User_information.this,UserHead.class);
+                startActivity(intent);
             }
         });
 
     }
-    private void showPopupMenu(View view) {
-        // View当前PopupMenu显示的相对View的位置
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        // menu布局
-        popupMenu.getMenuInflater().inflate(R.menu.photo_menu, popupMenu.getMenu());
-        // menu的item点击事件
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
 
-                    case R.id.select:
-                        Toast.makeText(User_information.this,"删除",Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                }
-                return true;
-            }
-        });
-        // PopupMenu关闭事件
-        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            public void onDismiss(PopupMenu menu) {
-            }
-        });
-        popupMenu.show();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

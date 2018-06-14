@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,7 +44,7 @@ public class page4 extends Fragment {
     private ArrayAdapter adapter_time = null;// 时间下拉列表配置器
     private ArrayAdapter adapter_even = null;// 频率下拉列表配置器
     private ArrayAdapter adapter_ring =null;// 铃声下拉列表配置器
-    private ImageView imageButton1; // 头像按钮
+    public static ImageView imageButton1; // 头像按钮
     private TimePickerView pvTime;// 时间自定义界面
     private Switch switch1;// 振动按钮
     private Spinner time_select_1; // 提醒时间下拉列表
@@ -77,8 +79,18 @@ public class page4 extends Fragment {
         yezi_2 = view.findViewById(R.id.yezi_2);// 叶子时间显示
 
         // 显示用户名
-        if(!BeanUserInformation.currentLoginUser.getUsername().equals("anyType{}"))
-            user_name_page4.setText(BeanUserInformation.currentLoginUser.getUsername());
+        if(BeanUserInformation.currentLoginUser.getIcon()!=null)
+        {
+            Bitmap bm;
+            byte[] bitmapByte = BeanUserInformation.currentLoginUser.getIcon();
+            if (bitmapByte.length != 0) {
+                bm = BitmapFactory.decodeByteArray(bitmapByte, 0,bitmapByte.length);
+                imageButton1.setImageBitmap(bm);
+            } else {
+
+            }
+        }
+        user_name_page4.setText(BeanUserInformation.currentLoginUser.getUsername());
 
         // 头像按钮
         imageButton1.setOnClickListener(new View.OnClickListener() {

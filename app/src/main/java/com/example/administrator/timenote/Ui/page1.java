@@ -20,11 +20,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.Model.List_menu;
 import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
@@ -45,6 +47,8 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     private New_List new_list;// 新建清单
     public static NavigationView navigationView;
     private Button new_button;// 新建事务
+    public static ImageView person;// 侧滑菜单头像
+    private TextView name;// 侧滑菜单名字
     private static boolean stase1 = true, stase2 = false;// 列表显示状态
 
 
@@ -55,15 +59,18 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         navigationView = (NavigationView)view.findViewById(R.id.nav);
         list_menu = view.findViewById(R.id.list_menu_list);
         inindrawer("lzc");
-        View headerView = navigationView.getHeaderView(0);//获取头布局
+        person = view.findViewById(R.id.person_head);
+        name = view.findViewById(R.id.name);
+//        View headerView = navigationView .inflateHeaderView()getHeaderView(R.layout.head);// 获取头布局
         new_button=view.findViewById(R.id.new_task2);
 
+        // 侧滑菜单
         list2 = view.findViewById(R.id.list_1);
         list2.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 switch (view.getId()){
-                    case R.id.list_1://点击菜单，跳出侧滑菜单
+                    case R.id.list_1:// 点击菜单，跳出侧滑菜单
                         if (drawerLayout.isDrawerOpen(navigationView)){
                             drawerLayout.closeDrawer(navigationView);
                         }else{
@@ -73,6 +80,20 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                 }
             }
         });
+        // 显示用户名
+        if(BeanUserInformation.currentLoginUser.getIcon()!=null)
+        {
+            Bitmap bm;
+            byte[] bitmapByte = BeanUserInformation.currentLoginUser.getIcon();
+            if (bitmapByte.length != 0) {
+                bm = BitmapFactory.decodeByteArray(bitmapByte, 0,bitmapByte.length);
+                person.setImageBitmap(bm);
+            } else {
+
+            }
+        }
+        name.setText(BeanUserInformation.currentLoginUser.getUsername());
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             public boolean onNavigationItemSelected(MenuItem item) {
                 //item.setChecked(true);
@@ -139,6 +160,8 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
             }
         });
         return view;
+
+
     }
 
     private void showPopupMenu(View view) {

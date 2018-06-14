@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -39,7 +40,7 @@
         <activity android:name=".Ui.Mainlist" />
         <activity android:name=".Ui.User_information" />
         <activity android:name=".Ui.Task_Update" />
-        <activity android:name=".Ui.Pesonal"></activity>
+        <activity android:name=".Ui.Pesonal" />
 
         <receiver android:name=".Ring.RingReceived">
             <intent-filter>
@@ -47,7 +48,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Ring.RingActivity"></activity>
+        <activity android:name=".Ring.RingActivity" />
 
         <receiver
             android:name=".Ring.MulAppWidgetProvider"
@@ -59,7 +60,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/mul_app_widget_provider_info"></meta-data>
+                android:resource="@xml/mul_app_widget_provider_info" />
         </receiver>
 
         <service
@@ -68,7 +69,8 @@
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name=".Ui.List_Update"></activity>
+        <activity android:name=".Ui.List_Update" />
+        <activity android:name=".Ui.UserHead"></activity>
     </application>
 
 </manifest>
