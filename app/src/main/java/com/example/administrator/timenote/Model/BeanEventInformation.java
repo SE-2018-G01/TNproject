@@ -1,12 +1,15 @@
 package com.example.administrator.timenote.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Sprou on 2018/6/9.
  */
 
 public class BeanEventInformation {
+    public static List<BeanEventInformation> allEventList = new ArrayList<>();
     private int userid;
     private int eventid;
     private int dreminid;

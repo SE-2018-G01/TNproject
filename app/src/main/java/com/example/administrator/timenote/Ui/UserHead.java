@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import com.bumptech.glide.Glide;
+import com.example.administrator.timenote.Manager.UserManager.SaveHead;
+import com.example.administrator.timenote.Manager.UserManager.UserActivity;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 import com.liuguangqiang.ipicker.IPicker;
@@ -31,6 +33,7 @@ public class UserHead extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SelectedAdapter adapter;
     private ArrayList<String> selectPictures = new ArrayList<>();
+    private byte[] bitmapByte;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +74,7 @@ public class UserHead extends AppCompatActivity {
 
                 ByteArrayOutputStream baos=new ByteArrayOutputStream();
                 bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] bitmapByte = baos.toByteArray();
+                bitmapByte = baos.toByteArray();
                 if (bitmapByte.length != 0) {
                     bm = BitmapFactory.decodeByteArray(bitmapByte, 0,bitmapByte.length);
                 } else {
@@ -80,6 +83,28 @@ public class UserHead extends AppCompatActivity {
                 if(BeanUserInformation.currentLoginUser!=null)
                 {
                     BeanUserInformation.currentLoginUser.setIcon(bitmapByte);
+
+                    Thread r = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            SaveHead saveHead = new SaveHead();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            saveHead.getRemoteInfo(bitmapByte);
+
+                        }
+                    });
+                    r.start();
+                    try {
+                        r.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     User_information.uesr_image.setImageBitmap(bm);
                     page4.imageButton1.setImageBitmap(bm);
                     page1.person.setImageBitmap(bm);

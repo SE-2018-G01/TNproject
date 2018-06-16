@@ -34,18 +34,18 @@ public class LoadAllEvent {
     HttpTransportSE transport = new HttpTransportSE(endPoint,60000*5);
 
     //创建子线程并引用webservice层的LoadUser方法
-    public List<BeanEventInformation> getRemoteInfo(int userid) {
+    public Boolean getRemoteInfo(int userid) {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
-        rpc.addProperty("usereid", userid);
+        rpc.addProperty("userid", userid);
         envelope.bodyOut = rpc;
         // 设置是否调用的是dotNet开发的WebService
         envelope.dotNet = true;
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
         transport.debug = true;
-        List<BeanEventInformation> eventInformationList = new ArrayList<BeanEventInformation>();
+        //List<BeanEventInformation> eventInformationList = new ArrayList<>();
         try {
             transport.call(soapAction, envelope);
             String a = transport.requestDump;
@@ -62,17 +62,17 @@ public class LoadAllEvent {
                 e.setDreminid(Integer.parseInt(mstr.getProperty(2).toString()));
                 e.setListid(Integer.parseInt(mstr.getProperty(3).toString()));
                 e.setEventname(mstr.getProperty(4).toString());
-                e.setEventdate(stringToDate(mstr.getProperty(5).toString(), "yyyy-MM-ddTHH:mm:ss"));
-                e.setDreminddate(stringToDate(mstr.getProperty(6).toString(), "yyyy-MM-ddTHH:mm:ss"));
-                e.setLeaveseventsign(mstr.getProperty(7).toString());
-                if(mstr.getProperty(8)!=null) e.setEventnote(mstr.getProperty(8).toString());
-                eventInformationList.add(e);
+                if(mstr.getProperty(8)!=null) e.setEventnote(mstr.getProperty(5).toString());
+                e.setEventdate(stringToDate(mstr.getProperty(6).toString().replaceAll("T"," "), "yyyy-MM-dd HH:mm:ss"));
+                e.setDreminddate(stringToDate(mstr.getProperty(7).toString().replaceAll("T"," "), "yyyy-MM-dd HH:mm:ss"));
+                e.setLeaveseventsign(mstr.getProperty(8).toString());
+                BeanEventInformation.allEventList.add(e);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // msg.what = 0;
+            return false;
         }
-        return eventInformationList;
+        return true;
     }
 
     public static Date stringToDate(String strTime, String formatType) {

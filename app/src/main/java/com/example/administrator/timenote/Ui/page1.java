@@ -26,6 +26,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.UserManager.GetHead;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.Model.List_menu;
 import com.example.administrator.timenote.Model.task;
@@ -92,6 +93,34 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
 
             }
         }
+        else{
+            Thread r = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    GetHead getHead = new GetHead();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    getHead.getRemoteInfo();
+
+                }
+            });
+            r.start();
+            try {
+                r.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Bitmap bm;
+            byte[] bitmapByte = BeanUserInformation.currentLoginUser.getIcon();
+            if (bitmapByte.length != 0) {
+                bm = BitmapFactory.decodeByteArray(bitmapByte, 0,bitmapByte.length);
+                person.setImageBitmap(bm);
+            }
+        }
         name.setText(BeanUserInformation.currentLoginUser.getUsername());
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -140,6 +169,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         MyCustomAdapter adapter = new MyCustomAdapter(this.inflater.getContext());
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
         for (int i = 0; i < 10; i++) {
             adapter.addSeparatorItem(new task(new java.sql.Timestamp(System.currentTimeMillis())));
             for (int j = 0; j < 10; j++) {

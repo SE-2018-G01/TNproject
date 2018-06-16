@@ -1,5 +1,9 @@
 package com.example.administrator.timenote.Manager.UserManager;
 
+import android.util.Base64;
+
+import com.example.administrator.timenote.Model.BeanUserInformation;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.MarshalBase64;
 import org.ksoap2.serialization.SoapObject;
@@ -26,10 +30,11 @@ public class GetHead {
     HttpTransportSE transport = new HttpTransportSE(endPoint);
 
     //创建子线程并引用webservice层的LoadUser方法
-    public byte[] getRemoteInfo() {
+    public void getRemoteInfo() {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
+        rpc.addProperty("userid",9);
         //rpc.addProperty("head", head);
         envelope.bodyOut = rpc;
         // 设置是否调用的是dotNet开发的WebService
@@ -37,15 +42,20 @@ public class GetHead {
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
         transport.debug = false;
-        byte[] result = new byte[1024];
         try {
             transport.call(soapAction, envelope);
             if (envelope.getResponse()!=null) {
-                result = envelope.getResponse().toString().getBytes();
+                //result = envelope.getResponse().toString().getBytes();
+                byte[] a = Base64.decode(envelope.getResponse().toString(), Base64.DEFAULT);
+                BeanUserInformation.currentLoginUser.setIcon(a);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+    }
+
+    public static void main(String[] args){
+        GetHead getHead = new GetHead();
+        getHead.getRemoteInfo();
     }
 }

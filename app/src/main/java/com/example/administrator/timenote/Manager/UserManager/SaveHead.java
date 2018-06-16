@@ -1,5 +1,7 @@
 package com.example.administrator.timenote.Manager.UserManager;
 
+import android.util.Base64;
+
 import com.example.administrator.timenote.Model.BeanUserInformation;
 
 import org.ksoap2.SoapEnvelope;
@@ -25,14 +27,15 @@ public class SaveHead {
     // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
 
-    HttpTransportSE transport = new HttpTransportSE(endPoint);
+    HttpTransportSE transport = new HttpTransportSE(endPoint,60000*5);
 
     //创建子线程并引用webservice层的LoadUser方法
     public String getRemoteInfo(byte[] head) {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
-        rpc.addProperty("head", head);
+        rpc.addProperty("head", Base64.encodeToString(head, Base64.DEFAULT));
+        rpc.addProperty("userid",BeanUserInformation.currentLoginUser.getUserid());
         envelope.bodyOut = rpc;
         // 设置是否调用的是dotNet开发的WebService
         envelope.dotNet = true;
