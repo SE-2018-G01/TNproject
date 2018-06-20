@@ -2,6 +2,7 @@ package com.example.administrator.timenote.Ui;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -26,7 +27,9 @@ import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
 import com.example.administrator.timenote.Manager.TaskManager.NewEvent;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import org.w3c.dom.Text;
@@ -42,17 +45,17 @@ public class New_task extends Dialog {
     private Button back; // 取消按钮
     private Context context;
     private Button dateselect; // 日期选择按钮
+    public String getdate; // 事务时间获取
     private Button list; // 清单选择按钮
     private Button level; // 优先级选择按钮
     private Level_select level_select;// 优先级选择界面
+    public int listid = 0; // 清单id获取
+    private int priority = 0; // 清单优先级
     private TimePickerView pvTime, pvCustomTime;// 时间选择界面
     private Button sure; // 确定按钮
-    public EditText task; // 任务输入框
-    public String getdate; // 事务时间获取
     public String scode; // 事务名称获取
-    public int listid = 0; //清单id获取
-
-    private int priority = 0;
+    private Calendar selectedDate; // 系统时间获取
+    public EditText task; // 任务输入框
 
     public New_task(Context context) {
         super(context);
@@ -102,7 +105,29 @@ public class New_task extends Dialog {
             public void onClick(View view) {
                 // 获取事务信息
                 scode = task.getText().toString();
+                // 新建插入
                 initsure();
+                // 重新获取
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        LoadAllEvent loadAllEvent = new LoadAllEvent();
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        loadAllEvent.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+
+                    }
+                });
+                t.start();
+                try {
+                    t.join(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 dismiss();
             }
         });
@@ -120,8 +145,16 @@ public class New_task extends Dialog {
         list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List_select list_select=new List_select(context,R.style.dialog);
+                final List_select list_select=new List_select(context,R.style.dialog);
                 list_select.show();
+                list_select.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (list_select.getIssure()){
+                            listid = list_select.getNlistid();
+                        }
+                    }
+                });
             }
         });
 
@@ -169,7 +202,7 @@ public class New_task extends Dialog {
     }
 
     //
-    private  void initlevel(){
+    private void initlevel(){
         switch(Level_select.getLevel())
         {
             case 0:
@@ -191,11 +224,12 @@ public class New_task extends Dialog {
         }
     }
     private void initCustomTimePicker() {//Dialog 模式下，在底部弹出
-        Calendar selectedDate = Calendar.getInstance();
+        selectedDate = Calendar.getInstance();
         pvCustomTime = new TimePickerBuilder(context, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                getdate = getTime(date);
+               selectedDate.setTime(date);
             }
         })
                 .setDate(selectedDate)
@@ -250,8 +284,6 @@ public class New_task extends Dialog {
         }
     }
     private void initCustomTimePicker2() {
-
-        Calendar selectedDate = Calendar.getInstance();
         pvTime = new TimePickerBuilder(context, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {

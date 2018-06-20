@@ -61,7 +61,7 @@ public class UserHead extends AppCompatActivity {
         list_spot_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupMenu(head);
+                showPopupMenu(list_spot_4);
             }
         });
 

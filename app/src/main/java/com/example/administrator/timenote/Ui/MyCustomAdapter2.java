@@ -10,21 +10,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.administrator.timenote.Model.BeanEventInformation;
-import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class MyCustomAdapter extends BaseAdapter implements View.OnClickListener{
+public class MyCustomAdapter2 extends BaseAdapter implements View.OnClickListener{
 
     public static ArrayList<BeanEventInformation> getData() {
         return data;
     }
 
     public static void setData(ArrayList<BeanEventInformation> data) {
-        MyCustomAdapter.data = data;
+        MyCustomAdapter2.data = data;
     }
 
     private static ArrayList<BeanEventInformation> data = new ArrayList<>();
@@ -37,7 +36,7 @@ public class MyCustomAdapter extends BaseAdapter implements View.OnClickListener
     private int index = 0;
 
 
-    public MyCustomAdapter(Context context) {
+    public MyCustomAdapter2(Context context) {
         data.clear();
         inflater = LayoutInflater.from(context);
     }
@@ -79,11 +78,12 @@ public class MyCustomAdapter extends BaseAdapter implements View.OnClickListener
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         int type = getItemViewType(position);
+
             holder = new ViewHolder();
             switch (type) {
                 case TYPE_SEPARATOR:
                     convertView = inflater.inflate(R.layout.item2, null);
-                    holder.date1 = convertView .findViewById(R.id.item_2);
+                    holder.date1 = convertView.findViewById(R.id.item_2);
                     holder.t = data.get(position);
 //                    holder.format=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:SS");
 //                    holder.date1.setText(holder.format.format(holder.t.getDate_1()));
@@ -91,15 +91,15 @@ public class MyCustomAdapter extends BaseAdapter implements View.OnClickListener
 
                 case TYPE_ITEM:
                     convertView = inflater.inflate(R.layout.arrary_button, null);
-                    holder.taskname = convertView .findViewById(R.id.taskname);
-                    holder.date1 = convertView .findViewById(R.id.data_1);
-                    holder.view_line = convertView .findViewById(R.id.view_color_1);
-                    holder.taskdes = convertView .findViewById(R.id.taskdes);
-                    holder.ImageId = convertView .findViewById(R.id.image_level);
+                    holder.taskname = convertView.findViewById(R.id.taskname);
+                    holder.date1 = convertView.findViewById(R.id.data_1);
+                    holder.view_line = convertView.findViewById(R.id.view_color_1);
+                    holder.taskdes = convertView.findViewById(R.id.taskdes);
+                    holder.ImageId = convertView.findViewById(R.id.image_level);
                     holder.checkBox = convertView.findViewById(R.id.checkBox);
                     break;
-
             }
+
             convertView.setTag(holder);
 
         holder.t = data.get(position);
@@ -116,9 +116,6 @@ public class MyCustomAdapter extends BaseAdapter implements View.OnClickListener
                 holder.format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:SS");
                 if(!holder.format.format(holder.t.getEventdate()).equals("0001年01月01日 00:00:00")){
                     holder.date1.setText(holder.format.format(holder.t.getEventdate()));
-                }
-                else {
-//                    holder.date1.setText("无");
                 }
                 holder.date1.setOnClickListener(this);
                 holder.date1.setTag(position);

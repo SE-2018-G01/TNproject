@@ -31,7 +31,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
         </activity>
         <activity android:name=".Ui.Sign_UpActivity" />
@@ -71,7 +70,8 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity android:name=".Ui.List_Update" />
-        <activity android:name=".Ui.UserHead"></activity>
+        <activity android:name=".Ui.UserHead" />
+        <activity android:name=".Ui.Yezi_start" />
     </application>
 
 </manifest>

@@ -20,6 +20,35 @@ public class BeanEventInformation {
     private Date eventdate;
     private Date dreminddate;
     private String leaveseventsign;// 数据库存储形式为Boolean
+    private int checkBox;
+    private String datetype; // 标题
+
+    public Date getDate_1() {
+        return date_1;
+    }
+
+    public void setDate_1(Date date_1) {
+        this.date_1 = date_1;
+    }
+
+    private Date date_1; // 标题
+
+
+    public String getDatetype() {
+        return datetype;
+    }
+
+    public void setDatetype(String datetype) {
+        this.datetype = datetype;
+    }
+
+    public int getCheckBox() {
+        return checkBox;
+    }
+
+    public void setCheckBox(int cheackBox) {
+        this.checkBox = cheackBox;
+    }
 
     public int getUserid() {
         return userid;
@@ -100,4 +129,12 @@ public class BeanEventInformation {
     public void setLeaveseventsign(String leaveseventsign) {
         this.leaveseventsign = leaveseventsign;
     }
+
+    public BeanEventInformation(){
+
+    }
+    public BeanEventInformation(String datetype){
+        this.setDatetype(datetype);
+    }
+
 }

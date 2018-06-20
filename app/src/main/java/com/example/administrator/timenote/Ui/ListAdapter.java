@@ -19,7 +19,7 @@ public class ListAdapter extends ArrayAdapter<String> implements OnClickListener
     private InnerItemOnclickListener mListener;
 
     public ListAdapter(Context context, int resource, ArrayList<String> objects) {
-        super(context, resource,objects);
+        super(context, resource, objects);
         resourceId=resource;
     }
 

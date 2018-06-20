@@ -11,12 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.administrator.timenote.Manager.TaskManager.NewList;
-import com.example.administrator.timenote.Manager.UserManager.EmailResend;
-import com.example.administrator.timenote.Manager.UserManager.UserLogin;
-import com.example.administrator.timenote.Model.BeanUserInformation;
+import com.example.administrator.timenote.Manager.ListManager.NewList;
 import com.example.administrator.timenote.R;
 
 public class New_List extends Dialog {
@@ -95,7 +91,6 @@ public class New_List extends Dialog {
                             e.printStackTrace();
                         }
                         newList.getRemoteInfo(list_name);
-
                     }
                 });
                 t.start();

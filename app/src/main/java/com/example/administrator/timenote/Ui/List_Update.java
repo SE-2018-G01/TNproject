@@ -18,6 +18,8 @@ import com.example.administrator.timenote.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.administrator.timenote.Model.BeanListInformation.allList;
+
 public class List_Update extends AppCompatActivity implements AdapterView.OnItemClickListener, ListAdapter.InnerItemOnclickListener{
 
     private Button back;// 返回按钮
@@ -47,16 +49,15 @@ public class List_Update extends AppCompatActivity implements AdapterView.OnItem
         });
 
         // 列表点击
-        inindrawer("lzc");
+        inindrawer();
 
     }
-    public void inindrawer(String name){
+    public void inindrawer(){
         list = new ArrayList<>();
         Bitmap bmp = BitmapFactory.decodeResource(this.getResources(), R.drawable.menu_list);
-        List_menu list_menu_item = new List_menu(bmp,"收集箱");
-        list.add(list_menu_item);
-        for(int i=0;i<10;i++){
-            list_menu_item = new List_menu(bmp,name+i);
+        List_menu list_menu_item ;
+        for(int i=0 ; i < allList.size(); i++){
+            list_menu_item = new List_menu(bmp,allList.get(i).getListname());
             list.add(list_menu_item);
         }
 

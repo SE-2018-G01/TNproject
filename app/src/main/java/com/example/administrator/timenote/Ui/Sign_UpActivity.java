@@ -18,11 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.timenote.Manager.UserManager.EmailResend;
 import com.example.administrator.timenote.Manager.UserManager.UserActivity;
 import com.example.administrator.timenote.Manager.UserManager.UserCreate;
 import com.example.administrator.timenote.Manager.UserManager.UserLogin;
-import com.example.administrator.timenote.Manager.UserManager.UserRollBack;
 import com.example.administrator.timenote.R;
 
 import static com.example.administrator.timenote.Model.BeanUserInformation.tryLoginUser;
@@ -32,7 +30,7 @@ public class Sign_UpActivity extends AppCompatActivity {
     private EditText email,name,pwd,pwd2;
     private TextView email_error_1,email_remind_1,email_error_2,pwd_error_1,pwd_error_2;
     private ProgressDialog logDialog;// 等待注册的加载框
-    public static  String semail;// 邮箱提取
+    public static String semail;// 邮箱提取
     private String sname,spwd;// 昵称和密码提取
     private String spwd2;// 确认密码提取
     private static String judge;
@@ -57,6 +55,11 @@ public class Sign_UpActivity extends AppCompatActivity {
         email_remind_1=findViewById(R.id.email_remind_1);
         pwd_error_1=findViewById(R.id.pwd_error_1);
         pwd_error_2=findViewById(R.id.pwd_error_2);
+
+        if (MainActivity.suesrid != null){
+            email.setText(MainActivity.suesrid);
+            name.requestFocus();
+        }
 
         // 密码隐藏
         pwd.setTransformationMethod(PasswordTransformationMethod
@@ -143,7 +146,7 @@ public class Sign_UpActivity extends AppCompatActivity {
                     });
                     t.start();
                     try {
-                        t.join(30000);
+                        t.join(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -296,7 +299,7 @@ public class Sign_UpActivity extends AppCompatActivity {
             });
             j.start();
             try {
-                j.join(3000);
+                j.join(30000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -338,13 +341,13 @@ public class Sign_UpActivity extends AppCompatActivity {
                                 }
                             });
                             r.start();
-                            try {
-                                r.join(30000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            finish();
+//                            try {
+//                                r.join(30000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
                             Toast.makeText(Sign_UpActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
                 });

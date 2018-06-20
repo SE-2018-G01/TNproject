@@ -13,7 +13,7 @@
         android:id="@+id/view_color_1"
         android:layout_width="5dp"
         android:layout_height="80dp"
-        android:background="#ff0033"
+        android:background="#ff6666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,15 +21,14 @@
         android:id="@+id/taskp1"
         android:layout_width="330dp"
         android:layout_height="10dp"
-        android:textColor="#ff0033"
         app:layout_constraintEnd_toStartOf="@+id/image_level"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="0dp"
 
         app:layout_constraintEnd_toStartOf="@+id/taskdes"
@@ -39,28 +38,28 @@
 
     <TextView
         android:id="@+id/taskname"
-        android:layout_width="295dp"
+        android:layout_width="258dp"
         android:layout_height="28dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginTop="4dp"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/image_level"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
         app:layout_constraintTop_toBottomOf="@+id/taskp1" />
 
     <TextView
         android:id="@+id/taskdes"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_width="250dp"
+        android:layout_height="15dp"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.357"
+        app:layout_constraintHorizontal_bias="0.597"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskname" />
 
     <TextView
         android:id="@+id/data_1"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="17dp"
         android:textColor="#ff0033"
         android:textSize="12sp"

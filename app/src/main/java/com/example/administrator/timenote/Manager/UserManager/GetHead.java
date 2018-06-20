@@ -34,7 +34,7 @@ public class GetHead {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
-        rpc.addProperty("userid",9);
+        rpc.addProperty("userid",BeanUserInformation.currentLoginUser.getUserid());
         //rpc.addProperty("head", head);
         envelope.bodyOut = rpc;
         // 设置是否调用的是dotNet开发的WebService

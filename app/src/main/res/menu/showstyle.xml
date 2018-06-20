@@ -3,7 +3,7 @@
     <item
         android:id="@+id/priorit_1"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/按优先级排序" />
+        android:title="@string/按时间排序" />
 
 
     <item

@@ -15,18 +15,18 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by XuanWem Chen on 2018/6/10.
+ * Created by XuanWem Chen on 2018/6/17.
  */
 
-public class LoadAllEvent {
+public class LoadAllEventByPro {
     // 命名空间
     String nameSpace = "http://tempuri.org/";
     // 调用的方法名称
-    String methodName = "AllEvent";
+    String methodName = "AllEventByPro";
     // EndPoint
     String endPoint = "http://39.108.124.121:5818/WebService1.asmx";
     // SOAP Action
-    String soapAction = "http://tempuri.org//AllEvent/";
+    String soapAction = "http://tempuri.org//AllEventByPro/";
 
     // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
@@ -45,15 +45,13 @@ public class LoadAllEvent {
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
         transport.debug = false;
-        List<BeanEventInformation> allEventListByDate = new ArrayList<>();
+        //List<BeanEventInformation> eventInformationList = new ArrayList<>();
+        List<BeanEventInformation> allEventListByPro = new ArrayList<>();
         try {
             transport.call(soapAction, envelope);
-//            String a = transport.requestDump;
-//            System.out.println(a);
-//            String b =  transport.responseDump;
-//            System.out.println(b);
             SoapObject result = (SoapObject) envelope.bodyIn;
             SoapObject detail = (SoapObject) result.getProperty(methodName+"Result");
+
             for (int j = 0; j < detail.getPropertyCount(); j++) {
                 BeanEventInformation e = new BeanEventInformation();
                 SoapObject mstr = (SoapObject) detail.getProperty(j);
@@ -68,9 +66,9 @@ public class LoadAllEvent {
                 e.setLeaveseventsign(mstr.getProperty("Leaveseventsign").toString());
                 if(!mstr.getProperty("Eventnote").toString().equals("anyType{}")) e.setEventnote(mstr.getProperty("Eventnote").toString());
                 e.setCheckBox(Integer.parseInt(mstr.getProperty("Complete").toString()));
-                allEventListByDate.add(e);
+                allEventListByPro.add(e);
             }
-            BeanEventInformation.allEventList = allEventListByDate;
+            BeanEventInformation.allEventList = allEventListByPro;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

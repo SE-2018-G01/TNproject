@@ -12,6 +12,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
+
     <include
         android:id="@+id/title_1"
         layout="@layout/title_base1"
@@ -23,7 +24,7 @@
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="458dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,12 +35,12 @@
             android:id="@+id/new_task2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="352dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginEnd="30dp"
             android:background="@drawable/new_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.867"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginRight="30dp" />
     </android.support.constraint.ConstraintLayout>
 
 
@@ -63,7 +64,7 @@
         <ListView
             android:id="@+id/list_menu_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="200dp"
             tools:ignore="MissingConstraints">
         </ListView>

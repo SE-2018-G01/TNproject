@@ -32,7 +32,7 @@ public class Level_select extends Dialog {
         Level_select.level = level;
     }
 
-    private static int level=0;
+    private static int level=-1;
 
     public Level_select (Context context) {
         super(context);
@@ -67,7 +67,7 @@ public class Level_select extends Dialog {
 
         // 为按钮绑定点击事件监听器
         back.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View ciew)
+            public void onClick(View view)
             {
                 dismiss();
             }

@@ -13,9 +13,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.administrator.timenote.Manager.ListManager.LoadAllList;
+import com.example.administrator.timenote.Manager.ListManager.NewList;
+import com.example.administrator.timenote.Manager.TaskManager.Complete;
+import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 import android.widget.AdapterView.OnItemClickListener;
 import java.util.ArrayList;
+
+import static com.example.administrator.timenote.Model.BeanListInformation.allList;
 
 public class List_select extends Dialog implements OnItemClickListener, ListAdapter.InnerItemOnclickListener {
     /**
@@ -27,12 +35,32 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
     private ListView listView;// 清单列表
     private ArrayList<String> listname;// 清单名称列表
     private New_List new_list;// 新建清单;
+    private static int nlistid; // 获得清单id
+    private static String nlistname="所有";// 当前选择的清单名称
+    private Boolean issure = false;
+
+    public Boolean getIssure() {
+        return issure;
+    }
+
+
+//    public static int getListid() {
+//        return listid;
+//    }
+//
+//    private static int listid;
+
+    public static int getNlistid() {
+        return nlistid;
+    }
+
+
 
     public static String getNlistname() {
         return nlistname;
     }
 
-    private static String nlistname="收集箱";// 当前选择的清单名称
+
 
     public List_select(Context context) {
         super(context);
@@ -65,26 +93,19 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
 
         // 根据id在布局中找到控件对象
         back=findViewById(R.id.back_4);
-        listname=new ArrayList<String>();
-        for(int i=0;i<10;i++)
-        {
-            listname.add("清单");
-        }
-        listname.add("添加清单");
         listView = findViewById(R.id.listView3);
-        listAdapter=new ListAdapter(context,R.layout.list_button,listname);
-        listAdapter.setOnInnerItemOnClickListener(this);
-        listView.setAdapter(listAdapter);
+
+        initList();
 
         // 为按钮绑定点击事件监听器
         back.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View ciew)
+            public void onClick(View view)
             {
                 dismiss();
             }
         });
 
-        listView.setOnItemClickListener(this);
+
 
         this.setCancelable(true);
     }
@@ -106,12 +127,38 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
                         if(new_list.getIssue())
                         {
                             nlistname = new_list.getList_name();
+
+                            // TODO 2018.6.17 添加清单nlistname
+                            Thread t = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    NewList newList = new NewList();
+                                    try {
+                                        Thread.sleep(300);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    newList.getRemoteInfo(nlistname);
+                                }
+                            });
+                            t.start();
+                            try {
+                                t.join(30000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            issure = true;
+                            initList();
+                            dismiss();
                             Toast.makeText(context,nlistname,Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
                 }
                 else{
+                    nlistid = allList.get(position).getListid();
+                    issure = true;
                     dismiss();
                     Toast.makeText(context,nlistname,Toast.LENGTH_SHORT).show();
                 }
@@ -122,9 +169,49 @@ public class List_select extends Dialog implements OnItemClickListener, ListAdap
         }
     }
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(context,"列表 "+position+" 被点击了",Toast.LENGTH_SHORT).show();
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        Toast.makeText(context,"列表 "+position+" 被点击了",Toast.LENGTH_SHORT).show();
     }
+
+    private void initList(){
+        listname=new ArrayList<String>();
+//        listname.add("收集箱");
+//        for(int i=0;i<10;i++)
+//        {
+//            listname.add("清单");
+//        }
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                LoadAllList loadAllList = new LoadAllList();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                loadAllList.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i < allList.size(); i++){
+            listname.add(allList.get(i).getListname());
+        }
+        listAdapter=new ListAdapter(context,R.layout.list_button,listname);
+        listname.add("添加清单");
+        nlistid = allList.get(allList.size()-1).getListid();
+        listAdapter.setOnInnerItemOnClickListener(this);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this);
+    }
+
 }
 //    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //        //通过view获取其内部的组件，进而进行操作

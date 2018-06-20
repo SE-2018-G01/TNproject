@@ -1,6 +1,7 @@
 package com.example.administrator.timenote.Ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,6 +35,18 @@ public class page3 extends Fragment {
             public void onClick(View view) {
                 task_select_list=new Task_select_list(inflater.getContext(),R.style.dialog);
                 task_select_list.show();
+                task_select_list.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        if(task_select_list.isIssure())
+                        {
+                            Intent intent = new Intent(getContext(),Yezi_start.class);
+                            intent.putExtra("p",task_select_list.getNposition());
+                            startActivity(intent);
+                        }
+
+                    }
+                });
             }
         });
 
@@ -41,7 +54,8 @@ public class page3 extends Fragment {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getContext(),Yezi_start.class);
+                startActivity(intent);
             }
         });
 

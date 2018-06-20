@@ -77,7 +77,7 @@ public class Email_sure extends Dialog {
 
             // 为按钮绑定点击事件监听器
             back.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View ciew)
+                public void onClick(View view)
                 {
                     dismiss();
                 }

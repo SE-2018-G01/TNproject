@@ -21,7 +21,7 @@ public class List_menu_Adapter extends ArrayAdapter<List_menu> implements View.O
     private ListAdapter.InnerItemOnclickListener mListener;
 
     public List_menu_Adapter(Context context, int resource, List<List_menu> objects) {
-        super(context, resource,objects);
+        super(context, resource, objects);
         resourceId=resource;
     }
 

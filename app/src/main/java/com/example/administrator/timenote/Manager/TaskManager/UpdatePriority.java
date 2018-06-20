@@ -1,7 +1,5 @@
 package com.example.administrator.timenote.Manager.TaskManager;
 
-import com.example.administrator.timenote.Model.BeanUserInformation;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.MarshalBase64;
 import org.ksoap2.serialization.SoapObject;
@@ -9,18 +7,18 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 /**
- * Created by XuanWem Chen on 2018/6/12.
+ * Created by XuanWem Chen on 2018/6/18.
  */
 
-public class NewList {
+public class UpdatePriority {
     // 命名空间
     String nameSpace = "http://tempuri.org/";
     // 调用的方法名称
-    String methodName = "NewList";
+    String methodName = "UpdateEventPriority";
     // EndPoint
     String endPoint = "http://39.108.124.121:5818/WebService1.asmx";
     // SOAP Action
-    String soapAction = "http://tempuri.org//NewList/";
+    String soapAction = "http://tempuri.org//UpdateEventPriority/";
 
     // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
@@ -28,12 +26,13 @@ public class NewList {
     HttpTransportSE transport = new HttpTransportSE(endPoint);
 
     //创建子线程并引用webservice层的LoadUser方法
-    public String getRemoteInfo(String listname) {
+    public String getRemoteInfo(int eventid, int eventpriority) {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
-        rpc.addProperty("userid", BeanUserInformation.currentLoginUser.getUserid());
-        rpc.addProperty("listname", listname);
+        rpc.addProperty("eventid", eventid);
+        rpc.addProperty("eventpriority",eventpriority);
+
         envelope.bodyOut = rpc;
         // 设置是否调用的是dotNet开发的WebService
         envelope.dotNet = true;
@@ -43,7 +42,7 @@ public class NewList {
         try {
             // 调用WebService
             transport.call(soapAction, envelope);
-            if (envelope.getResponse() != null) {
+            if (envelope.getResponse()!=null) {
                 result = envelope.getResponse().toString();
             }
         } catch (Exception e) {

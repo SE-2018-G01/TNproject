@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/list_select_1"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="#00000000"
@@ -15,19 +14,17 @@
         android:id="@+id/linearLayout"
         android:layout_width="350dp"
         android:layout_height="40dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="#ffffff"
-        android:orientation="horizontal">
-
+        app:layout_constraintTop_toTopOf="parent">
         <Button
             android:id="@+id/list_select_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/none"
-            android:text="@string/清单名称"
-           />
+            android:text="@string/收集箱" />
 
         <ImageView
             android:layout_width="20dp"
@@ -46,24 +43,36 @@
             android:textSize="25sp" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView4"
+    <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="350dp"
-        android:layout_height="180dp"
-        android:background="@drawable/none"
-        android:divider="#ffffff"
+        android:layout_height="250dp"
+        android:layout_marginTop="40dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ListView
+            android:id="@+id/listView4"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/none"
+            android:divider="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView4">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
         <Button
             android:id="@+id/back_6"
@@ -71,10 +80,11 @@
             android:layout_height="20dp"
             android:layout_marginLeft="280dp"
             android:layout_marginStart="280dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="0dp"
             android:background="@drawable/none"
             android:text="@string/取消"
             android:textColor="#169BD5">
+
         </Button>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

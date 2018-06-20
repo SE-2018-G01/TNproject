@@ -8,26 +8,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import com.example.administrator.timenote.Model.BeanEventInformation;
 import com.example.administrator.timenote.R;
 
 import java.util.ArrayList;
 
-public class task_select_Adapter extends ArrayAdapter<String> implements View.OnClickListener {
+public class task_select_Adapter extends ArrayAdapter<BeanEventInformation> implements View.OnClickListener {
     private int resourceId;
     private ListAdapter.InnerItemOnclickListener mListener;
 
-    public task_select_Adapter (Context context, int resource, ArrayList<String> objects) {
-        super(context, resource,objects);
+    public task_select_Adapter (Context context, int resource, ArrayList<BeanEventInformation> objects) {
+        super(context, resource, objects);
         resourceId=resource;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
-        ListAdapter.ViewHolder holder=null;
+        ViewHolder holder=null;
         @SuppressLint("ViewHolder")
         View view = LayoutInflater.from(getContext()).inflate(resourceId,null,false);
-        holder=new ListAdapter.ViewHolder();
+        holder=new ViewHolder();
         holder.mButton= (Button) view.findViewById(R.id.task_select_button_1);
-        holder.mButton.setText(getItem(position));
+        holder.mButton.setText(getItem(position).getEventname());
         holder.mButton.setOnClickListener(this);
         holder.mButton.setTag(position);
         return view;

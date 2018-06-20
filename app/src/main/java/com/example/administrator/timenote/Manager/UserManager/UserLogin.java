@@ -2,6 +2,7 @@ package com.example.administrator.timenote.Manager.UserManager;
 
 
 import android.os.Message;
+import android.util.Base64;
 import android.util.Base64DataException;
 import android.util.Log;
 import android.widget.Toast;
@@ -67,7 +68,7 @@ public class UserLogin {
             SoapObject result = (SoapObject) envelope.getResponse();
             u.setUserid(Integer.parseInt(result.getProperty(0).toString()));
             u.setUsername(result.getProperty(1).toString());
-            u.setUserpassword(result.getProperty(2).toString());
+            if(!result.getProperty(2).toString().equals("anyType{}")) u.setUserpassword(result.getProperty(2).toString());
             u.setUseremail(result.getProperty(3).toString());
             u.setCreatdate(result.getProperty(4).toString());
             u.setStopdate(result.getProperty(5).toString());
@@ -76,7 +77,7 @@ public class UserLogin {
             u.setAchievement(Integer.parseInt(result.getProperty(8).toString()));
             u.setLeavesid(Integer.parseInt(result.getProperty(9).toString()));
             u.setAuthcode(result.getProperty(10).toString());
-            u.setIcon(result.getProperty(11).toString().getBytes());
+            u.setIcon(Base64.decode(result.getProperty(11).toString(), Base64.DEFAULT));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -100,6 +100,11 @@
     <string name="修改亲的干">修改清单</string>
     <string name="请选择重复">请选择重复</string>
     <string name="确认保存">确认保存</string>
+    <string name="开启叶子计时">开启叶子计时</string>
+    <string name="选择提醒时间">选择提醒时间</string>
+    <string name="time">25:00</string>
+    <string name="事物名称">事物名称</string>
+    <string name="tuichu">退出</string>
     <string-array name="周期模式1">
         <item>日</item>
         <item>一</item>

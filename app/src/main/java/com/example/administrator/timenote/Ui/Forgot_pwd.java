@@ -12,14 +12,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.administrator.timenote.Manager.UserManager.EmailResend;
 import com.example.administrator.timenote.Manager.UserManager.Email_ck;
+import com.example.administrator.timenote.Manager.UserManager.UserLogin;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
+
+import static com.example.administrator.timenote.Model.BeanUserInformation.tryLoginUser;
 
 public class Forgot_pwd extends AppCompatActivity {
     private int recLen=60;
     private EditText email3,verification_code_3;
     private Button back1,send,resend2,sure_Verification;
     private TextView email3_error,Verification_error;
+    public static String semail3;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -38,6 +44,11 @@ public class Forgot_pwd extends AppCompatActivity {
         email3_error=findViewById(R.id.email_error_2);
         Verification_error=findViewById(R.id.Verification_code_error_2);
 
+        if (MainActivity.suesrid != null){
+            email3.setText(MainActivity.suesrid);
+            verification_code_3.requestFocus();
+        }
+
         back1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 finish();
@@ -48,15 +59,72 @@ public class Forgot_pwd extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String semail3=email3.getText().toString();
+                semail3=email3.getText().toString();
                 if(semail3.indexOf("@")>0)
                 {
-                    if(semail3.equals("972357450@qq.com")==true)
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            UserLogin userLogin = new UserLogin();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            userLogin.getRemoteInfo(semail3);
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if(BeanUserInformation.tryLoginUser != null)
                     {
                         send.setVisibility(View.INVISIBLE);
                         resend2.setVisibility(View.VISIBLE);
                         recLen = 60;
                         cdt.start();
+                        Thread f = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                EmailResend emailResend = new EmailResend();
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                emailResend.getRemoteInfo(semail3);
+                            }
+                        });
+                        f.start();
+                        try {
+                            f.join(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Thread r = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                UserLogin userLogin = new UserLogin();
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                userLogin.getRemoteInfo(semail3);
+                            }
+                        });
+                        r.start();
+                        try {
+                            r.join(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         email3_error.setVisibility(View.VISIBLE);
@@ -75,7 +143,7 @@ public class Forgot_pwd extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String scode=verification_code_3.getText().toString();
-                if(scode.equals("12263")==true)
+                if(scode.equals(BeanUserInformation.tryLoginUser.getAuthcode()))
                 {
                     //修改密码
                     Intent intent=new Intent(Forgot_pwd.this,Change_pwd.class);

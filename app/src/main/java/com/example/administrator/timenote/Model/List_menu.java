@@ -8,6 +8,11 @@ public class List_menu {
     private Bitmap imageView;
     private String list_menu_name;
     public List_menu(){};
+
+    public List_menu(String list_menu_name){
+        this.list_menu_name = list_menu_name;
+    }
+
     public List_menu(Bitmap imageView,String list_menu_name){
         this.imageView = imageView;
         this.list_menu_name = list_menu_name;

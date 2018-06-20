@@ -13,9 +13,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.ListManager.LoadAllList;
+import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
+import com.example.administrator.timenote.Model.BeanEventInformation;
+import com.example.administrator.timenote.Model.BeanListInformation;
+import com.example.administrator.timenote.Model.BeanUserInformation;
+import com.example.administrator.timenote.Model.List_menu;
 import com.example.administrator.timenote.R;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.administrator.timenote.Model.BeanEventInformation.allEventList;
 
 public class Task_select_list  extends Dialog implements AdapterView.OnItemClickListener, ListAdapter.InnerItemOnclickListener {
     /**
@@ -23,11 +32,27 @@ public class Task_select_list  extends Dialog implements AdapterView.OnItemClick
      */
     private Button back;// 取消按钮
     private Context context;
-    private task_select_Adapter listAdapter;// 事务列表适配器
+    private MyCustomAdapter3 listAdapter;// 事务列表适配器
     private ListView listView;// 事务列表
-    private ArrayList<String> listname;// 事务名称列表
+    private ArrayList<BeanEventInformation> listname;// 事务名称列表
     private Button list_select_1;// 清单选择按钮
     private List_select list_select;// 清单选择
+    private int listid;
+    private boolean issure;
+    private int nposition;
+
+    public int getNposition() {
+        return nposition;
+    }
+
+
+
+    public boolean isIssure() {
+        return issure;
+    }
+
+
+
 
     public Task_select_list(Context context) {
         super(context);
@@ -40,6 +65,9 @@ public class Task_select_list  extends Dialog implements AdapterView.OnItemClick
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+
+        listid = BeanListInformation.allList.get(0).getListid();
+
         super.onCreate(savedInstanceState);
         // 指定布局
         this.setContentView(R.layout.task_select_list_1);
@@ -63,16 +91,9 @@ public class Task_select_list  extends Dialog implements AdapterView.OnItemClick
         back=findViewById(R.id.back_6);
 
         // 事务列表添加
-        listname=new ArrayList<String>();
-        for(int i=0;i<10;i++)
-        {
-            listname.add("事务名称");
-        }
         listView =findViewById(R.id.listView4);
-        listAdapter=new task_select_Adapter(context,R.layout.task_secect_button,listname);
-        listAdapter.setOnInnerItemOnClickListener(this);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
+        initEventList();
+
         // 任务清单选择按钮
         list_select_1=findViewById(R.id.list_select_2);
 
@@ -95,6 +116,28 @@ public class Task_select_list  extends Dialog implements AdapterView.OnItemClick
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
                         list_select_1.setText(List_select.getNlistname());
+                        listid = List_select.getNlistid();
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                LoadAllEvent loadAllEvent = new LoadAllEvent();
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                loadAllEvent.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+
+                            }
+                        });
+                        t.start();
+                        try {
+                            t.join(30000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        initEventList();
                     }
                 });
             }
@@ -106,7 +149,7 @@ public class Task_select_list  extends Dialog implements AdapterView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(context,"列表 "+adapterView+" 被点击了",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context,"列表 "+adapterView+" 被点击了",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,11 +158,27 @@ public class Task_select_list  extends Dialog implements AdapterView.OnItemClick
         position = (Integer) v.getTag();
         switch (v.getId()) {
             case R.id.task_select_button_1:
-                Toast.makeText(context,"点击"+listname.get(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"点击"+MyCustomAdapter3.getData().get(position).getEventname(),Toast.LENGTH_SHORT).show();
+                issure = true;
+                nposition = position;
                 dismiss();
                 break;
             default:
                 break;
         }
+    }
+
+    private void initEventList(){
+
+        listAdapter = new MyCustomAdapter3(getLayoutInflater().getContext());
+
+        for(int i = 0; i < allEventList.size(); i++){
+            if ((allEventList.get(i).getListid() == listid) && (allEventList.get(i).getCheckBox() == 0))
+                listAdapter.addItem(allEventList.get(i));
+        }
+
+        listAdapter.setOnInnerItemOnClickListener(this);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this);
     }
 }
