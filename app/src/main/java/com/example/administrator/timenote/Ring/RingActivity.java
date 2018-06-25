@@ -7,6 +7,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -25,6 +28,8 @@ public class RingActivity extends AppCompatActivity {
 
     private Vibrator mVibrator;  //声明一个振动器对象
 
+    private Ringtone rt;
+
     PowerManager.WakeLock mWakelock;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +43,26 @@ public class RingActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         setContentView(R.layout.activity_ring);
 
-        //铃声设置
-        mediaPlayer = MediaPlayer.create(this, R.raw.one);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        // 铃声设置
+        int ring = getIntent().getIntExtra("ring",0);
+        switch (ring){
+            case 0:break;
+            case 1:
+                mediaPlayer = MediaPlayer.create(this, R.raw.one);
+                mediaPlayer.setLooping(true);
+                mediaPlayer.start();
+                break;
+            default:break;
+        }
 
-        //振动设置
-        mVibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);
-        mVibrator.vibrate(new long[]{1000, 1000, 1000, 1000}, 0);
+
+
+        // 振动设置
+        Boolean vib = getIntent().getBooleanExtra("vib",false);
+        if (vib) {
+            mVibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);
+            mVibrator.vibrate(new long[]{1000, 1000, 1000, 1000}, 0);
+        }
 
         //唤醒屏幕
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
@@ -56,6 +73,7 @@ public class RingActivity extends AppCompatActivity {
     //停止点击事件
     @SuppressLint("NewApi")
     public void stop(View view){
+
         if (mediaPlayer!=null){
             if (mediaPlayer.isPlaying()){
                 mediaPlayer.stop();
@@ -68,17 +86,17 @@ public class RingActivity extends AppCompatActivity {
         }
         mWakelock.release();
 
-        //设置下一次提醒
-        int id = getIntent().getIntExtra("id",0);
-
-        Calendar calendar1= Calendar.getInstance();
-        Intent intent=new Intent();
-        intent.setAction("com.liuqian.android_27alarm.RING");
-        intent.putExtra("id",id);
-        PendingIntent pendingIntent= PendingIntent.getBroadcast(RingActivity.this,id,intent,0);
-        //闹钟管理者 参数： 唤醒屏幕，
-        AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar1.getTimeInMillis(),pendingIntent);
+//        //设置下一次提醒
+//        int id = getIntent().getIntExtra("id",0);
+//
+//        Calendar calendar1= Calendar.getInstance();
+//        Intent intent=new Intent();
+//        intent.setAction("com.liuqian.android_27alarm.RING");
+//        intent.putExtra("id",id);
+//        PendingIntent pendingIntent= PendingIntent.getBroadcast(RingActivity.this,id,intent,0);
+//        //闹钟管理者 参数： 唤醒屏幕，
+//        AlarmManager alarmManager =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar1.getTimeInMillis(),pendingIntent);
 
         finish();
     }

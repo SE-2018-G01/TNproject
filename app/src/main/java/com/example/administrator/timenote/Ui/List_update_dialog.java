@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.administrator.timenote.Model.BeanListInformation;
 import com.example.administrator.timenote.R;
 
 public class List_update_dialog extends Dialog {
@@ -64,6 +65,8 @@ public class List_update_dialog extends Dialog {
         back = findViewById(R.id.back_12);
         list_update_name = findViewById(R.id.list_update_1);
         sure = findViewById(R.id.sure_list_update);
+
+        list_update_name.setText(BeanListInformation.allList.get(List_Update.getPosition()).getListname());
 
         // 为按钮绑定点击事件监听器
         back.setOnClickListener(new View.OnClickListener() {

@@ -57,7 +57,7 @@ public class LoadAllEventByPro {
                 SoapObject mstr = (SoapObject) detail.getProperty(j);
                 e.setUserid(Integer.parseInt(mstr.getProperty("Userid").toString()));
                 e.setEventid(Integer.parseInt(mstr.getProperty("Eventid").toString()));
-                e.setDreminid(Integer.parseInt(mstr.getProperty("Dreminid").toString()));
+                e.setDremindid(Integer.parseInt(mstr.getProperty("Dremindid").toString()));
                 e.setListid(Integer.parseInt(mstr.getProperty("Listid").toString()));
                 e.setEventname(mstr.getProperty("Eventname").toString());
                 e.setEventpriority(Integer.parseInt(mstr.getProperty("Eventpriority").toString()));

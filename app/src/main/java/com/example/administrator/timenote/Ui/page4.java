@@ -32,6 +32,13 @@ import com.bigkoo.pickerview.listener.OnDismissListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.example.administrator.timenote.Manager.DremindManager.ChangeDRTime;
+import com.example.administrator.timenote.Manager.DremindManager.ChangeLeavesTime;
+import com.example.administrator.timenote.Manager.DremindManager.ChangeRepeat;
+import com.example.administrator.timenote.Manager.DremindManager.ChangeRing;
+import com.example.administrator.timenote.Manager.DremindManager.ChangeVib;
+import com.example.administrator.timenote.Manager.DremindManager.LoadDremind;
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
@@ -52,14 +59,17 @@ public class page4 extends Fragment {
     private Spinner time_even_1;// 时间
     private TextView time_text;// 自定义时间提醒框
     private TextView time_even_text;// 自定义频率
-    private TextView user_name_page4;// 用户名显示
+    private static TextView user_name_page4;// 用户名显示
     private Button user_psonal_button;// 个人中心
     private TextView yezi_time;// 叶子时长
     private TextView yezi_2;// 设置叶子时长
     private yezi_time_select yezi_time_select1;//设置叶子时长界面
+    private int time_p;// 定义时间位置
+    private String time_get;// 获取时间
 
-
-
+    public static void setUser_name_page4(String user_name_page4) {
+        page4.user_name_page4.setText(user_name_page4);
+    }
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
@@ -72,11 +82,39 @@ public class page4 extends Fragment {
         time_ring_1 = view.findViewById(R.id.time_ring_1);// 闹铃选择
         time_even_1 = view.findViewById(R.id.time_even_1);// 重复选择
         time_text = view.findViewById(R.id.time_text_1);// 自定义时间显示
-        time_even_text = view.findViewById(R.id.retime_text_1);// 重复选择存储文本
+        //time_even_text = view.findViewById(R.id.retime_text_1);// 重复选择存储文本
         user_name_page4 = view.findViewById(R.id.user_name_page4);// 用户名文本
         user_psonal_button = view.findViewById(R.id.user_psonal_button);//
         yezi_time = view.findViewById(R.id.yezi_time);// 叶子时间选择
         yezi_2 = view.findViewById(R.id.yezi_2);// 叶子时间显示
+
+        initloaddefault();
+
+        // 初始叶子时长
+        yezi_time.setText(String.valueOf(BeanDRemindInformation.defaultset.getLeavestime()) + "分钟");
+
+        // 初始默认提醒时间
+        switch (BeanDRemindInformation.defaultset.getDefaulttime()){
+            case "0":time_p = 0;break;
+            case "1":time_p = 1;break;
+            case "2":time_p = 2;break;
+            case "3":time_p = 3;break;
+            case "4":time_p = 4;break;
+            case "5":time_p = 5;break;
+            case "6":time_p = 6;break;
+            case "7":time_p = 7;break;
+            case "8":time_p = 8;break;
+            case "9":time_p = 9;break;
+            case "10":time_p = 10;break;
+            case "11":time_p = 11;break;
+            default:time_p = 12;break;
+        }
+
+        // 初始震动状态
+        if (BeanDRemindInformation.defaultset.getDremindvib().equals("true"))
+            switch1.setChecked(true);
+        else
+            switch1.setChecked(false);
 
         // 显示用户名
         if(BeanUserInformation.currentLoginUser.getIcon()!=null)
@@ -107,8 +145,47 @@ public class page4 extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     Toast.makeText(getContext(),"开启振动",Toast.LENGTH_SHORT).show();
-                }else {
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            ChangeVib changeVib = new ChangeVib();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            changeVib.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99,1);
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
                     Toast.makeText(getContext(),"关闭振动",Toast.LENGTH_SHORT).show();
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            ChangeVib changeVib = new ChangeVib();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            changeVib.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99,0);
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -123,8 +200,67 @@ public class page4 extends Fragment {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        if(yezi_time_select1.getYezi_time()!=null)
-                            yezi_time.setText(yezi_time_select1.getYezi_time()+"分钟");
+                        if(yezi_time_select1.getYezi_time()!=null) {
+                            yezi_time.setText(yezi_time_select1.getYezi_time() + "分钟");
+                            Thread t = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    ChangeLeavesTime changeLeavesTime = new ChangeLeavesTime();
+                                    try {
+                                        Thread.sleep(300);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    changeLeavesTime.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99,Integer.parseInt(yezi_time_select1.getYezi_time()));
+                                }
+                            });
+                            t.start();
+                            try {
+                                t.join(30000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            initloaddefault();
+                            Yezi_start.setM(Integer.parseInt(yezi_time_select1.getYezi_time()));
+                        }
+                    }
+                });
+            }
+        });
+        yezi_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yezi_time_select1 =new yezi_time_select(getContext(),R.style.dialog);
+                yezi_time_select1.show();
+                yezi_time_select1.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if(yezi_time_select1.getYezi_time()!=null) {
+                            yezi_time.setText(yezi_time_select1.getYezi_time() + "分钟");
+                            Thread t = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    ChangeLeavesTime changeLeavesTime = new ChangeLeavesTime();
+                                    try {
+                                        Thread.sleep(300);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    changeLeavesTime.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(), -99, Integer.parseInt(yezi_time_select1.getYezi_time()));
+                                }
+                            });
+                            t.start();
+                            try {
+                                t.join(30000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            initloaddefault();
+                            Yezi_start.setM(Integer.parseInt(yezi_time_select1.getYezi_time()));
+                        }
                     }
                 });
             }
@@ -139,14 +275,97 @@ public class page4 extends Fragment {
             }
         });
 
+        // 重复选择列表
+        adapter_even = ArrayAdapter.createFromResource(getContext(),R.array.time_even,android.R.layout.simple_spinner_item);
+        adapter_even.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        time_even_1.setAdapter(adapter_even);
+        // 初始重复
+        time_even_1.setSelection(BeanDRemindInformation.defaultset.getDremindrepeat(),true);
+        time_even_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+
+                // 更新设置
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        ChangeRepeat changeRepeat = new ChangeRepeat();
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        changeRepeat.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99, position);
+
+                    }
+                });
+                t.start();
+                try {
+                    t.join(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                initloaddefault();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // 铃声选择列表
+        adapter_ring = ArrayAdapter.createFromResource(getContext(),R.array.time_ring,android.R.layout.simple_spinner_item);
+        adapter_ring.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        time_ring_1.setAdapter(adapter_ring);
+        // 初始铃声
+        time_ring_1.setSelection(BeanDRemindInformation.defaultset.getDremindring(),true);
+        time_ring_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+                    // 更新设置
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            ChangeRing changeRing = new ChangeRing();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            changeRing.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99, position);
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                initloaddefault();
+                }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         // 时间选择列表
         adapter_time = ArrayAdapter.createFromResource(getContext(),R.array.time_select,android.R.layout.simple_spinner_item);
         adapter_time.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         time_select_1.setAdapter(adapter_time);
+        // 初始默认提醒时间
+        time_select_1.setSelection(time_p,true);
+        if (time_p == 12){
+            time_text.setText(BeanDRemindInformation.defaultset.getDefaulttime());
+        }
         time_select_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String cityName = (String) adapter_time.getItem(position);
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+                final String cityName = (String) adapter_time.getItem(position);
                 if(cityName.equals("自定义"))
                 {
                     initCustomTimePicker2();
@@ -158,6 +377,27 @@ public class page4 extends Fragment {
                             if(time_text.getVisibility()==0)
                             {
                                 // 更新设置
+                                Thread t = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // TODO Auto-generated method stub
+                                        ChangeDRTime loadDremind = new ChangeDRTime();
+                                        try {
+                                            Thread.sleep(300);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99, time_get);
+
+                                    }
+                                });
+                                t.start();
+                                try {
+                                    t.join(30000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                initloaddefault();
                             }
                         }
                     });
@@ -166,6 +406,26 @@ public class page4 extends Fragment {
                 {
                     time_text.setVisibility(View.INVISIBLE);
                     // 更新设置
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            ChangeDRTime loadDremind = new ChangeDRTime();
+                            try {
+                                Thread.sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99, String.valueOf(position));
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    initloaddefault();
                 }
             }
 
@@ -183,6 +443,7 @@ public class page4 extends Fragment {
         pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
+                time_get = getTime(date);
                 time_text.setText(getTime(date));
                 time_text.setVisibility(View.VISIBLE);
             }
@@ -237,7 +498,30 @@ public class page4 extends Fragment {
         }
     }
     private String getTime(Date date) {//可根据需要自行截取数据显示
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(date);
+    }
+
+    private void initloaddefault(){
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                LoadDremind loadDremind = new LoadDremind();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99);
+                BeanDRemindInformation.defaultset = BeanDRemindInformation.tsset;
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

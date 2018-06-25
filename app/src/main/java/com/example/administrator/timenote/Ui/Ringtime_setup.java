@@ -11,6 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.DremindManager.ChangeAhead;
+import com.example.administrator.timenote.Manager.DremindManager.LoadDremind;
+import com.example.administrator.timenote.Manager.DremindManager.NewDRemind;
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import java.util.ArrayList;
@@ -27,7 +32,10 @@ public class Ringtime_setup extends Dialog implements AdapterView.OnItemClickLis
     private Context context;
     private ListView listView;// 选择列表
     private ArrayList<String> list = new ArrayList<>();
+    private int position;
+    private String show;
 
+    private Boolean aheaddx = true;
 
     public Ringtime_setup(Context context) {
         super(context);
@@ -89,12 +97,96 @@ public class Ringtime_setup extends Dialog implements AdapterView.OnItemClickLis
 
 
     public void itemClick(View v) {
-        int position;
         position = (Integer) v.getTag();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                LoadDremind loadDremind = new LoadDremind();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                aheaddx = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (!aheaddx){
+            Thread s = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    NewDRemind newDRemind = new NewDRemind();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    newDRemind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
+                }
+            });
+            s.start();
+            try {
+                s.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Thread r = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    ChangeAhead changeAhead = new ChangeAhead();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    changeAhead.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid(),position);
+                }
+            });
+            r.start();
+            try {
+                r.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Thread r = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    ChangeAhead changeAhead = new ChangeAhead();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    changeAhead.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid(),position);
+                }
+            });
+            r.start();
+            try {
+                r.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
-
-        Toast.makeText(getContext(),"123",Toast.LENGTH_SHORT).show();
-
-
+        switch (position){
+            case 0:show = "准时";break;
+            case 1:show = "提前 5 分钟";break;
+            case 2:show = "提前 30 分钟";break;
+            case 3:show = "提前 1 小时";break;
+            case 4:show = "提前 1 天";break;
+        }
+        Toast.makeText(getContext(),show,Toast.LENGTH_SHORT).show();
+        dismiss();
     }
 }

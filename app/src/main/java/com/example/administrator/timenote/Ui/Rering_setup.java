@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.DremindManager.ChangeRepeat;
+import com.example.administrator.timenote.Manager.DremindManager.LoadDremind;
+import com.example.administrator.timenote.Manager.DremindManager.NewDRemind;
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import java.util.ArrayList;
@@ -26,7 +31,10 @@ public class Rering_setup extends Dialog implements AdapterView.OnItemClickListe
     private Context context;
     private ListView listView;// 选择列表
     private ArrayList<String> list = new ArrayList<>();
+    private int position;
+    private String show;
 
+    private Boolean redx = true;
 
     public Rering_setup(Context context) {
         super(context);
@@ -70,7 +78,7 @@ public class Rering_setup extends Dialog implements AdapterView.OnItemClickListe
         list.add("从不");
         list.add("每天");
         list.add("每周工作日(周一至周五)");
-        list.add("每周六");
+        list.add("每周休息日");
         list.add("每月(当天)");
         list.add("每年(当天)");
         ListAdapter listAdapter = new ListAdapter(context,R.layout.list_button,list);
@@ -89,13 +97,98 @@ public class Rering_setup extends Dialog implements AdapterView.OnItemClickListe
 
 
     public void itemClick(View v) {
-        int position;
         position = (Integer) v.getTag();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                LoadDremind loadDremind = new LoadDremind();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                redx = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (!redx){
+            Thread s = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    NewDRemind newDRemind = new NewDRemind();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    newDRemind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
+                }
+            });
+            s.start();
+            try {
+                s.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Thread r = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    ChangeRepeat changeRepeat = new ChangeRepeat();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    changeRepeat.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid(),position);
+                }
+            });
+            r.start();
+            try {
+                r.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Thread r = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    ChangeRepeat changeRepeat = new ChangeRepeat();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    changeRepeat.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid(),position);
+                }
+            });
+            r.start();
+            try {
+                r.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
-
-                Toast.makeText(getContext(),"123",Toast.LENGTH_SHORT).show();
-
-
+        switch (position){
+            case 0:show = "从不";break;
+            case 1:show = "每天";break;
+            case 2:show = "每周工作日(周一至周五)";break;
+            case 3:show = "每周休息日";break;
+            case 4:show = "每月(当天)";break;
+            case 5:show = "每年(当天)";break;
+        }
+        Toast.makeText(getContext(),show,Toast.LENGTH_SHORT).show();
+        dismiss();
     }
 }
 

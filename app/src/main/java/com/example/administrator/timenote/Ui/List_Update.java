@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.administrator.timenote.Manager.ListManager.UpdateList;
 import com.example.administrator.timenote.Model.List_menu;
 import com.example.administrator.timenote.R;
 
@@ -26,6 +27,12 @@ public class List_Update extends AppCompatActivity implements AdapterView.OnItem
     private ListView listView;// 清单列表
     private List<List_menu> list;
     private List_update_dialog list_update_dialog;
+    private static int position;
+
+    public static int getPosition() {
+        return position;
+    }
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +79,6 @@ public class List_Update extends AppCompatActivity implements AdapterView.OnItem
 
     }
     String name;
-    int position;
     @Override
     public void itemClick(View v) {
         position = (Integer) v.getTag();
@@ -88,6 +94,25 @@ public class List_Update extends AppCompatActivity implements AdapterView.OnItem
                         if(list_update_dialog.getIssue())
                         {
                             name = list_update_dialog.getList_name();
+                            Thread t = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    UpdateList updateList = new UpdateList();
+                                    try {
+                                        Thread.sleep(300);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    updateList.getRemoteInfo(name,allList.get(position).getListid());
+                                }
+                            });
+                            t.start();
+                            try {
+                                t.join(30000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             update();
                         }
 

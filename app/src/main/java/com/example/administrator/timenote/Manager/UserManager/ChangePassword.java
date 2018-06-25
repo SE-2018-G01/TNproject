@@ -22,7 +22,7 @@ public class ChangePassword {
     // EndPoint
     String endPoint = "http://39.108.124.121:5818/WebService1.asmx";
     // SOAP Action
-    String soapAction = "http://tempuri.org//UpdateUserpassward /";
+    String soapAction = "http://tempuri.org//UpdateUserpassward/";
 
     // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
     SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);

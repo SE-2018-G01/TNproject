@@ -49,6 +49,24 @@ public class UserHead extends AppCompatActivity {
         list_spot_4 = findViewById(R.id.list_spot_4);
         sure = findViewById(R.id.save_head);
 
+        if(BeanUserInformation.currentLoginUser.getIcon()!=null) {
+            Bitmap bm;
+            byte[] bitmapByte1 = BeanUserInformation.currentLoginUser.getIcon();
+            if (bitmapByte1.length != 0) {
+                bm = BitmapFactory.decodeByteArray(bitmapByte1, 0, bitmapByte1.length);
+                head.setImageBitmap(bm);
+            }
+            else {
+
+            }
+        }
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu(list_spot_4);
+            }
+        });
+
         // 返回按钮
         back.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -27,10 +27,14 @@ public class MulAppWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.mul_app_widget_provider);
 
-        mRemoteViews.setTextViewText(R.id.refresh, "点击跳转到Activity");
-        Intent skipIntent = new Intent(context, MainActivity.class);
+        mRemoteViews.setTextViewText(R.id.refresh, "进入TimeNote查看");
+        Intent skipIntent = new Intent(context, MulAppWidgetProvider.class);
+        skipIntent.setAction("refresh");
         PendingIntent pi = PendingIntent.getActivity(context, 200, skipIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         mRemoteViews.setOnClickPendingIntent(R.id.refresh, pi);
+
+        // 更新Wdiget
+
         // 设置 ListView 的adapter。
         // (01) intent: 对应启动 ListViewService(RemoteViewsService) 的intent
         // (02) setRemoteAdapter: 设置 ListView 的适配器
@@ -67,7 +71,7 @@ public class MulAppWidgetProvider extends AppWidgetProvider {
             Bundle extras = intent.getExtras();
             int position = extras.getInt(ListViewService.INITENT_DATA);
             Intent intent1 =new Intent();
-            intent1.setComponent(new ComponentName("com.example.administrator.timenote","com.example.administrator.timenote.Ui.Task_Update"));
+            intent1.setComponent(new ComponentName("com.example.administrator.timenote","com.example.administrator.timenote.Ui.MainActivity"));
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent1);
             mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.mul_app_widget_provider);

@@ -12,16 +12,35 @@
     >
 
     <TextView
+        android:id="@+id/task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="哦多可，你再不起床你就要丢掉这一天最美好的早晨了哦"
-        android:textColor="#aabbcc"
+        android:text="@string/事务名称"
+        android:textSize="25sp"
+        android:textColor="#000000"
         />
+    <TextView
+        android:id="@+id/task_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/事务时间"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stop"
+        android:text="@string/暂缓" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="stop"
-        android:text="停止"/>
-
+        android:text="@string/完成" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stop"
+        android:text="@string/推迟"/>
 </LinearLayout>

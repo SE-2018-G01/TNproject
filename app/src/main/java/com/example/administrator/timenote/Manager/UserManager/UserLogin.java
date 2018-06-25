@@ -55,29 +55,29 @@ public class UserLogin {
         envelope.dotNet = true;
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
-        transport.debug = true;
+        transport.debug = false;
         //Message msg = MainActivity.myHandler.obtainMessage();
         BeanUserInformation u = new BeanUserInformation();
         try {
             transport.call(soapAction, envelope);
-            String a = transport.requestDump;
-            System.out.println(a);
-            String b =  transport.responseDump;
-            System.out.println(b);
+//            String a = transport.requestDump;
+//            System.out.println(a);
+//            String b =  transport.responseDump;
+//            System.out.println(b);
             if (envelope.getResponse() == null) throw new Exception("没有该用户");
             SoapObject result = (SoapObject) envelope.getResponse();
-            u.setUserid(Integer.parseInt(result.getProperty(0).toString()));
-            u.setUsername(result.getProperty(1).toString());
-            if(!result.getProperty(2).toString().equals("anyType{}")) u.setUserpassword(result.getProperty(2).toString());
-            u.setUseremail(result.getProperty(3).toString());
-            u.setCreatdate(result.getProperty(4).toString());
-            u.setStopdate(result.getProperty(5).toString());
-            u.setUsercalendar(result.getProperty(6).toString());
-            u.setUsertypeface(result.getProperty(7).toString());
-            u.setAchievement(Integer.parseInt(result.getProperty(8).toString()));
-            u.setLeavesid(Integer.parseInt(result.getProperty(9).toString()));
-            u.setAuthcode(result.getProperty(10).toString());
-            u.setIcon(Base64.decode(result.getProperty(11).toString(), Base64.DEFAULT));
+            u.setUserid(Integer.parseInt(result.getProperty("Userid").toString()));
+            if(!result.getProperty("Username").toString().equals("anyType{}")) u.setUsername(result.getProperty("Username").toString());
+            if(!result.getProperty("Userpassword").toString().equals("anyType{}")) u.setUserpassword(result.getProperty("Userpassword").toString());
+            u.setUseremail(result.getProperty("Useremail").toString());
+            u.setCreatdate(result.getProperty("Creatdate").toString());
+            u.setStopdate(result.getProperty("Stopdate").toString());
+            u.setUsercalendar(result.getProperty("Usercalendar").toString());
+            u.setUsertypeface(result.getProperty("Usertypeface").toString());
+            u.setAchievement(Integer.parseInt(result.getProperty("Achievement").toString()));
+            u.setLeavesid(Integer.parseInt(result.getProperty("Leavesid").toString()));
+            u.setAuthcode(result.getProperty("Authcode").toString());
+            u.setIcon(Base64.decode(result.getProperty("Userhead").toString(), Base64.DEFAULT));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class UserLogin {
     }
     public static void main(String[] args){
         UserLogin userLogin = new UserLogin();
-        userLogin.getRemoteInfo("972357450@qq.com");
+        userLogin.getRemoteInfo("1191583108@qq.com");
         System.out.println(tryLoginUser.getUseremail());
         System.out.println(tryLoginUser.getUserpassword());
     }

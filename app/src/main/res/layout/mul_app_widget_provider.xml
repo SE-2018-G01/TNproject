@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="200dp"
+    android:updatePeriodMillis="60"
     android:layout_gravity="center">
 
 
@@ -10,7 +11,7 @@
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/刷新" />
+        android:text="@string/打开app" />
 
     <ListView
         android:id="@+id/lv_test"

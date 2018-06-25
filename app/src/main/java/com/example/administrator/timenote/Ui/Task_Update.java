@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.os.Message;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +31,9 @@ import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.timenote.Manager.TaskManager.DeleteEvent;
+import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
 import com.example.administrator.timenote.Manager.TaskManager.UpdateEvent;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import java.sql.ResultSet;
@@ -53,9 +57,10 @@ public class Task_Update extends AppCompatActivity {
     private Button time_setup;// 事务时间修改
     private EditText task_update_name;// 事务名称修改
     private EditText task_update_d;// 事务描述修改
+    private Calendar selectedDate;
 
     //private int position = getIntent().getIntExtra("position",0);
-    private int eventid;
+    private static int eventid;
     private String oldname;
     private String oldnote;
     private String oldleaveseventsign;
@@ -65,6 +70,10 @@ public class Task_Update extends AppCompatActivity {
     private int leaveseventsign = -1;// 获得叶子事务选择
     private String geteventname = "";// 获得事务名称
     private String geteventnote = "";// 获得事务备注
+
+    public static int getEventid() {
+        return eventid;
+    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,6 +300,41 @@ public class Task_Update extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        Thread w = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                LoadAllEvent loadAllEvent = new LoadAllEvent();
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                loadAllEvent.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+
+                            }
+                        });
+                        w.start();
+                        try {
+                            w.join(30000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Thread u = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                for (int i = 0; i < 10; i++) {
+                                    Message msg = Message.obtain();
+                                    msg.what = 1;
+                                    msg.obj = System.currentTimeMillis() + "";
+                                    page1.handler1.sendMessage(msg);
+                                    Log.i("MThread", Thread.currentThread().getName() + "----发送了消息！" + msg.obj);
+                                    SystemClock.sleep(1000);
+                                }
+                            }
+                        });
+                        u.start();
                         finish();
                         break;
                     case R.id.delete:
@@ -314,6 +358,43 @@ public class Task_Update extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
+                        Thread s = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                LoadAllEvent loadAllEvent = new LoadAllEvent();
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                loadAllEvent.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+
+                            }
+                        });
+                        s.start();
+                        try {
+                            s.join(30000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+//                        Thread v = new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                // TODO Auto-generated method stub
+//                                for (int i = 0; i < 10; i++) {
+//                                    Message msg = Message.obtain();
+//                                    msg.what = 1;
+//                                    msg.obj = System.currentTimeMillis() + "";
+//                                    page1.handler1.sendMessage(msg);
+//                                    Log.i("MThread", Thread.currentThread().getName() + "----发送了消息！" + msg.obj);
+//                                    SystemClock.sleep(1000);
+//                                }
+//                            }
+//                        });
+//                        v.start();
                         finish();
                         break;
                     default:
@@ -334,11 +415,12 @@ public class Task_Update extends AppCompatActivity {
         return format.format(date);
     }
     private void initCustomTimePicker() {//Dialog 模式下，在底部弹出
-        Calendar selectedDate = Calendar.getInstance();
+        selectedDate = Calendar.getInstance();
         pvCustomTime = new TimePickerBuilder(Task_Update.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 getdate = getTime(date);
+                selectedDate.setTime(date);
             }
         })
                 .setDate(selectedDate)
@@ -393,8 +475,6 @@ public class Task_Update extends AppCompatActivity {
         }
     }
     private void initCustomTimePicker2() {
-
-        Calendar selectedDate = Calendar.getInstance();
         pvTime = new TimePickerBuilder(Task_Update.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {

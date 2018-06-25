@@ -1,15 +1,23 @@
 package com.example.administrator.timenote.Ui;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +34,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.DremindManager.LoadDremind;
 import com.example.administrator.timenote.Manager.ListManager.LoadAllList;
 import com.example.administrator.timenote.Manager.TaskManager.Complete;
 import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
@@ -34,6 +43,7 @@ import com.example.administrator.timenote.Manager.TaskManager.UnComplete;
 import com.example.administrator.timenote.Manager.TaskManager.UpdatePriority;
 import com.example.administrator.timenote.Manager.UserManager.GetHead;
 import com.example.administrator.timenote.Manager.UserManager.UserLogin;
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
 import com.example.administrator.timenote.Model.BeanEventInformation;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.Model.List_menu;
@@ -41,13 +51,17 @@ import com.example.administrator.timenote.Model.task;
 import com.example.administrator.timenote.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static com.example.administrator.timenote.Model.BeanEventInformation.allEventList;
 import static com.example.administrator.timenote.Model.BeanListInformation.allList;
+import static com.example.administrator.timenote.Model.BeanUserInformation.tryLoginUser;
 
 public class page1  extends Fragment implements AdapterView.OnItemClickListener, ListAdapter.InnerItemOnclickListener{
 
@@ -67,6 +81,8 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     private int position; // 点击位置
     private TextView name;// 侧滑菜单名字
     private static boolean stase1 = true, stase2 = false, stase3 = true;// 列表显示状态
+    private int ringpid;
+    public static Handler handler1;
 
 
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +96,28 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         name = view.findViewById(R.id.name);
 //        View headerView = navigationView .inflateHeaderView()getHeaderView(R.layout.head);// 获取头布局
         new_button=view.findViewById(R.id.new_task2);
+
+        // 载入默认提醒设置
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                LoadDremind loadDremind = new LoadDremind();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99);
+                BeanDRemindInformation.defaultset = BeanDRemindInformation.tsset;
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // 侧滑菜单
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // 禁用手势侧滑操作
@@ -199,13 +237,38 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         //新建事务逻辑
         new_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                New_task new_task= new New_task(inflater.getContext(),R.style.dialog);
+                final New_task new_task= new New_task(inflater.getContext(),R.style.dialog);
                 new_task.show();
                 new_task.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
                         initReflesh();
-                        if(stase3 == true){
+                        if (new_task.getdate != null){
+                            Date date = null;
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            try {
+                                date = formatter.parse(new_task.getdate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            int eventid = 0;
+                            for (int i = 0; i < BeanEventInformation.allEventList.size(); i++) {
+                                if (BeanEventInformation.allEventList.get(eventid).getEventid() < BeanEventInformation.allEventList.get(i).getEventid())
+                                    eventid = i;
+                            }
+                            switch (BeanDRemindInformation.defaultset.getAheadtime()){
+                                case 0:break;
+                                case 1:
+                            }
+                            setAlarm(date, BeanDRemindInformation.defaultset.getDremindring(),Boolean.valueOf(BeanDRemindInformation.defaultset.getDremindvib()));
+
+
+                            //BeanDRemindInformation.defaultset.getDremindrepeat();
+
+                        }
+                        initReflesh();
+                        if(stase3){
                             initadapter();
                         }
                         else {
@@ -225,11 +288,11 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         // menu布局
         popupMenu.getMenuInflater().inflate(R.menu.showstyle, popupMenu.getMenu());
         gMenuItem1 = popupMenu.getMenu().findItem(R.id.complete_1);
-        if (stase1 == true) {
+        if (stase1) {
             gMenuItem1.setTitle("显示已完成");
         }
         gMenuItem2 = popupMenu.getMenu().findItem(R.id.priorit_1);
-        if (stase2 == false) {
+        if (!stase2) {
             gMenuItem2.setTitle("按优先级排序");
         }
         // menu的item点击事件
@@ -241,7 +304,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                         if (gMenuItem1.getTitle().equals("显示已完成")) {
                             stase1 = false;
                             //修改状态重新加载事务列表
-                            if(stase3 == true){
+                            if(stase3){
                                 initadapter();
                             }
                             else {
@@ -250,7 +313,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                         } else {
                             //修改状态重新加载事务列表
                             stase1 = true;
-                            if(stase3 == true){
+                            if(stase3){
                                 initadapter();
                             }
                             else {
@@ -284,7 +347,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getContext(),"列表 "+position+" 被点击了",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(),"列表 "+position+" 被点击了",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -300,6 +363,32 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                 intent1.putExtra("eventnote", MyCustomAdapter.getData().get(position).getEventnote());
                 intent1.putExtra("leaveseventsign", MyCustomAdapter.getData().get(position).getLeaveseventsign());
                 getContext().startActivity(intent1);
+                Thread r = new Thread(new Runnable() {
+                    public Handler getHandler(){//注意哦，在run执行之前，返回的是null
+                        return handler1;
+                    }
+                    @SuppressLint("HandlerLeak")
+                    @Override
+                    public void run() {
+
+                        Looper.prepare();
+                        handler1 = new Handler() {
+                            public void handleMessage(android.os.Message msg) {
+                                //这里处理消息
+                                Log.i("MThread", "收到消息了：" + Thread.currentThread().getName() + "----" + msg.obj);
+                                if(stase3){
+                                    initadapter();
+                                }
+                                else {
+                                    inittoday();
+                                }
+                            }
+
+                        };
+                        Looper.loop();
+                    }
+                });
+                r.start();
                 //Toast.makeText(getContext(), "an", Toast.LENGTH_SHORT).show();
                 break;
             // 修改优先级
@@ -330,9 +419,8 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            // 刷新
                             initReflesh();
-                            if(stase3 == true){
+                            if(stase3){
                                 initadapter();
                             }
                             else {
@@ -374,8 +462,14 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    // 刷新
                     initReflesh();
-                    initadapter();
+                    if(stase3){
+                        initadapter();
+                    }
+                    else {
+                        inittoday();
+                    }
                 }
                 else{
                     // TODO: 2018/6/17   修改为已完成
@@ -406,7 +500,12 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                         e.printStackTrace();
                     }
                     initReflesh();
-                    initadapter();
+                    if(stase3){
+                        initadapter();
+                    }
+                    else {
+                        inittoday();
+                    }
                 }
                 break;
 
@@ -453,7 +552,23 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                 break;
         }
     }
-    public void inindrawer(){
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void setAlarm(Date date,int ring,Boolean vib){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        //跳转
+        Intent intent=new Intent();
+        ringpid = UUID.randomUUID().hashCode();
+        intent.setAction("com.liuqian.android_27alarm.RING");
+        intent.putExtra("id",ringpid);
+        intent.putExtra("ring",ring);
+        intent.putExtra("vib",vib);
+        //PendingIntent
+        PendingIntent pendingIntent= PendingIntent.getBroadcast(getContext(),ringpid,intent,0);
+        //闹钟管理者 参数： 唤醒屏幕，
+        Calendar_View.alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+    }
+        private void inindrawer(){
         list = new ArrayList<>();
         Bitmap bmp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.menu_list);
         List_menu list_menu_item = new List_menu(bmp,"所有");
@@ -661,7 +776,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     }
 
     // 装载所有
-    private void initadapter(){
+    public void initadapter(){
         MyCustomAdapter adapter = new MyCustomAdapter(this.inflater.getContext());
         listView.setAdapter(adapter);
 

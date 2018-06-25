@@ -1,6 +1,8 @@
 package com.example.administrator.timenote.Ui;
 
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -33,6 +35,9 @@ public class Calendar_View extends AppCompatActivity {
     private Button task_1;
     private List<Fragment> list;
     private RadioGroup radioGroup;
+
+    public static AlarmManager alarmManager;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -41,6 +46,7 @@ public class Calendar_View extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 //        initWindow();//影藏最顶层的系统菜单栏
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         radioGroup = findViewById(R.id.rg_group);
         RadioButton yezi = findViewById(R.id.yezi_1);
         RadioButton calendar = findViewById(R.id.calendar_1);

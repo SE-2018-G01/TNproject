@@ -1,5 +1,6 @@
 package com.example.administrator.timenote.Ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.net.sip.SipSession;
@@ -15,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
 import com.example.administrator.timenote.R;
 
 import java.util.List;
@@ -57,6 +59,8 @@ public class yezi_time_select extends Dialog  {
         super.onCreate(savedInstanceState);
         // 指定布局
         this.setContentView(R.layout.yezi_select);
+
+
         Window dialogWindow = this.getWindow();
 
 //            WindowManager m = context.getWindowManager();
@@ -72,6 +76,10 @@ public class yezi_time_select extends Dialog  {
         sure = findViewById(R.id.sure_yezi);
         yezi_Time_Text = findViewById(R.id.yezi_time_text);
 
+        // 初始值
+        seek_yezi.setProgress(BeanDRemindInformation.defaultset.getLeavestime());
+        yezi_Time_Text.setText(String.valueOf(BeanDRemindInformation.defaultset.getLeavestime()));
+
         // 为按钮绑定点击事件监听器
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +90,6 @@ public class yezi_time_select extends Dialog  {
 
         // 确认按钮
         sure.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 yezi_time = yezi_Time_Text.getText().toString();
                 dismiss();

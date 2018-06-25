@@ -105,6 +105,10 @@
     <string name="time">25:00</string>
     <string name="事物名称">事物名称</string>
     <string name="tuichu">退出</string>
+    <string name="事务时间">事务时间</string>
+    <string name="暂缓">暂缓</string>
+    <string name="推迟">推迟5分钟</string>
+    <string name="打开app">打开app</string>
     <string-array name="周期模式1">
         <item>日</item>
         <item>一</item>
@@ -115,30 +119,35 @@
         <item>六</item>
     </string-array>
     <string-array name="time_select">
-        <item>1:00</item>
+        <item>0:00</item>
         <item>2:00</item>
-        <item>3:00</item>
+        <item>4:00</item>
+        <item>6:00</item>
         <item>8:00</item>
-        <item>9:00</item>
         <item>10:00</item>
-        <item>13:00</item>
+        <item>12:00</item>
         <item>14:00</item>
-        <item>15:00</item>
+        <item>16:00</item>
         <item>18:00</item>
-        <item>21:00</item>
+        <item>20:00</item>
+        <item>22:00</item>
         <item>自定义</item>
     </string-array>
     <string-array name="time_ring">
-        <item>nono</item>
-        <item>默认</item>
+        <item>禁用</item>
+        <item>铃声1</item>
+        <item>铃声2</item>
+        <item>铃声3</item>
+        <item>铃声4</item>
+        <item>铃声5</item>
+        <item>铃声6</item>
     </string-array>
     <string-array name="time_even">
         <item>从不</item>
         <item>每天</item>
         <item>每周工作日（周一至周五）</item>
-        <item>每周六</item>
+        <item>每周休息日</item>
         <item>每月（当天）</item>
         <item>每年（当天）</item>
-        <item>自定义</item>
     </string-array>
 </resources>

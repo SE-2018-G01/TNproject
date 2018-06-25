@@ -12,8 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.timenote.Manager.LeavesManager.LeavesAdd;
 import com.example.administrator.timenote.Manager.TaskManager.Complete;
 import com.example.administrator.timenote.Manager.TaskManager.UpdatePriority;
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
+import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import static com.example.administrator.timenote.Model.BeanEventInformation.allEventList;
@@ -26,10 +29,16 @@ public class Yezi_start extends AppCompatActivity{
     private Button back;// 退出按钮
     private TextView task_name;// 当前事物名称
     private TextView time;// 时间
-    private int M = 0;// 分钟
-    private int s = 3;// 秒
+    private static int M = 0;// 分钟
+    private int s = 10;// 秒
     private int p;
     private Task_select_list task_select_list;// 事务选择
+
+    public static void setM(int m) {
+        M = m;
+    }
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +47,7 @@ public class Yezi_start extends AppCompatActivity{
         back = findViewById(R.id.quit_task);
         task_name = findViewById(R.id.task_name_yezi);
         p = getIntent().getIntExtra("p",-1);
+        M = BeanDRemindInformation.defaultset.getLeavestime();
         if (p != -1) {
             task_name.setText(MyCustomAdapter3.getData().get(p).getEventname());
             task_name.setVisibility(View.VISIBLE);
@@ -74,6 +84,27 @@ public class Yezi_start extends AppCompatActivity{
 
         @SuppressLint("ResourceAsColor")
         public void onFinish() {
+            if (M == 0 || s == 1){
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        LeavesAdd leavesAdd = new LeavesAdd();
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        leavesAdd.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+                    }
+                });
+                t.start();
+                try {
+                    t.join(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             // TODO: 2018/6/19 退出逻辑
             initquit();
         }
@@ -106,7 +137,6 @@ public class Yezi_start extends AppCompatActivity{
                                     break;
                             }
                             allEventList.get(i).setCheckBox(1);
-
                         }
                     });
                     t.start();
@@ -115,6 +145,7 @@ public class Yezi_start extends AppCompatActivity{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    finish();
                 }
             });
             alterDialog.setNegativeButton("未完成", new DialogInterface.OnClickListener() {
@@ -175,6 +206,7 @@ public class Yezi_start extends AppCompatActivity{
                                 }
 
                             }
+                            finish();
 
                         }
                     });

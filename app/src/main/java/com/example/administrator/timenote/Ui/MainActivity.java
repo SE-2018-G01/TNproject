@@ -24,11 +24,13 @@ import android.widget.Toast;
 
 import com.example.administrator.timenote.Manager.UserManager.UserActivity;
 import com.example.administrator.timenote.Manager.UserManager.UserLogin;
+import com.example.administrator.timenote.Manager.UserManager.loginServe;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 import com.example.administrator.timenote.Threadcontroal.MyHandler;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import static com.example.administrator.timenote.Model.BeanUserInformation.currentLoginUser;
 import static com.example.administrator.timenote.Model.BeanUserInformation.tryLoginUser;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     //Message msg = new Message();
     //Message msg = myHandler.obtainMessage();
     //Log.("msg",msg);
-
+    private String spwd;
     @Override
     //访问网络同时加入这个
     @SuppressLint("NewApi")
@@ -84,7 +86,46 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        Map<String, String> map = new loginServe().getSaveUserInfo(MainActivity.this);
+        {
+            if(map!=null){
+                suesrid = map.get("useremail");
+                spwd = map.get("password");
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        UserLogin userLogin = new UserLogin();
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        userLogin.getRemoteInfo(suesrid);
+                        //myHandler.obtainMessage(1,u_rst).sendToTarget();
+                        //msg.obj = u_rst;
+                        //msg.what = 1;
+                        //myHandler.sendMessage(msg);
+                    }
+                });
+                t.start();
+                try {
+                    t.join(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
+                //判断账号密码是否匹配，是则进入主界面，否则弹框提示
+                AlertDialog.Builder alterDialog = new AlertDialog.Builder(MainActivity.this);
+                if (((suesrid.equals(tryLoginUser.getUseremail())) && (spwd.equals(tryLoginUser.getUserpassword())) && tryLoginUser.getStopdate().equals("0001-01-01T00:00:00"))) {
+                    Intent intent = new Intent(MainActivity.this, Calendar_View.class);
+                    startActivity(intent);
+                    currentLoginUser = tryLoginUser;
+                    boolean result = new loginServe().saveUserInfo(MainActivity.this,suesrid,spwd);
+                    finish();
+                }
+            }
+        }
         // 登录按钮
         button1.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("HandlerLeak")
@@ -96,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 suesrid=uesrid.getText().toString();
-                String spwd = pwd.getText().toString();
+                spwd = pwd.getText().toString();
 
 //                myHandler = new Handler(){
 //                    @Override
@@ -136,16 +177,13 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                SharedPreferences sharedPreferences = MainActivity.this.getApplicationContext().getSharedPreferences("userid", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.commit();
-
                 //判断账号密码是否匹配，是则进入主界面，否则弹框提示
                 AlertDialog.Builder alterDialog = new AlertDialog.Builder(MainActivity.this);
                 if (((suesrid.equals(tryLoginUser.getUseremail())) && (spwd.equals(tryLoginUser.getUserpassword())) && tryLoginUser.getStopdate().equals("0001-01-01T00:00:00"))) {
                     Intent intent = new Intent(MainActivity.this, Calendar_View.class);
                     startActivity(intent);
                     currentLoginUser = tryLoginUser;
+                    boolean result = new loginServe().saveUserInfo(MainActivity.this,suesrid,spwd);
                     finish();
                 }
                 else if((suesrid.equals(""))){
@@ -230,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
+                                        pwd.setText("");
                                         Toast.makeText(MainActivity.this, "用户激活成功", Toast.LENGTH_SHORT).show();
                                         uesrid.requestFocus();
                                     }
@@ -249,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(MainActivity.this, "确认", Toast.LENGTH_SHORT).show();
+                            pwd.setText("");
                             uesrid.requestFocus();
                         }
                     });

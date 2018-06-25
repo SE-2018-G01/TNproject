@@ -12,7 +12,7 @@ public class BeanEventInformation {
     public static List<BeanEventInformation> allEventList = new ArrayList<>();
     private int userid;
     private int eventid;
-    private int dreminid;
+    private int dremindid;
     private int listid;
     private String eventname;
     private String eventnote;
@@ -66,12 +66,12 @@ public class BeanEventInformation {
         this.eventid = eventid;
     }
 
-    public int getDreminid() {
-        return dreminid;
+    public int getDremindid() {
+        return dremindid;
     }
 
-    public void setDreminid(int dreminid) {
-        this.dreminid = dreminid;
+    public void setDremindid(int dreminid) {
+        this.dremindid = dreminid;
     }
 
     public int getListid() {
