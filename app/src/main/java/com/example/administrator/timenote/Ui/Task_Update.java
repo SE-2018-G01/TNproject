@@ -2,18 +2,23 @@ package com.example.administrator.timenote.Ui;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -33,6 +38,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.timenote.Manager.TaskManager.DeleteEvent;
 import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
 import com.example.administrator.timenote.Manager.TaskManager.UpdateEvent;
+import com.example.administrator.timenote.Model.BeanEventInformation;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
@@ -41,11 +47,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Task_Update extends AppCompatActivity {
+public class Task_Update extends Dialog {
 
     private Button back;// 返回按钮
+    private Context context;
     private MenuItem gMenuItem1, gMenuItem2;// list1的两个按钮
-    private String getdate;// 获得的时间
+    private String getdate = null;// 获得的时间
+
+    public boolean issure() {
+        return issure;
+    }
+
+    private boolean issure = false;
     private Button level_update;// 优先级修改
     private Button list_spot_3;// 菜单按钮
     private TextView list_name_task;// 修改清单按钮
@@ -64,6 +77,7 @@ public class Task_Update extends AppCompatActivity {
     private String oldname;
     private String oldnote;
     private String oldleaveseventsign;
+    private Date eventdate;
 
     private int getpriority = -1;// 获得优先级
     private int getlistid = -1;// 获得清单id
@@ -75,20 +89,59 @@ public class Task_Update extends AppCompatActivity {
         return eventid;
     }
 
+    public Task_Update(){
+        super(null);
+    }
+
+    public Task_Update(Context context) {
+        super(context);
+        this.context = context;
+    }
+
+    public Task_Update(Context context, int theme) {
+        super(context, theme);
+        this.context = context;
+    }
+    public Task_Update(Context context, int theme,int eventid,String eventname,String eventnote,String leaveseventsign, Date eventdate) {
+        super(context, theme);
+        this.context = context;
+        this.eventid = eventid;
+        this.oldname = eventname;
+        this.oldnote = eventnote;
+        this.oldleaveseventsign = leaveseventsign;
+        this.eventdate = eventdate;
+    }
+
+//    @Override
+//    public void show() {
+//        super.show();
+//        /**
+//         * 设置宽度全屏，要设置在show的后面
+//         */
+//        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+//        layoutParams.gravity = Gravity.BOTTOM;
+//        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//
+//        getWindow().getDecorView().setPadding(0, 0, 0, 0);
+//
+//        getWindow().setAttributes(layoutParams);
+//    }
 
     protected void onCreate(Bundle savedInstanceState) {
 
-        eventid = getIntent().getIntExtra("eventid",0);
-        oldname = getIntent().getStringExtra("eventname");
-        oldnote = getIntent().getStringExtra("eventnote");
-        oldleaveseventsign = getIntent().getStringExtra("leaveseventsign");
-
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_task__update);
-        {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        this.setContentView(R.layout.activity_task__update);
+
+        Window dialogWindow = this.getWindow();
+
+//        WindowManager m = context.getWindowManager();
+//        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+//        p.height = (int) (d.getHeight() ); // 高度设置为屏幕
+//        p.width = (int) (d.getWidth() ); // 宽度设置为屏幕
+        dialogWindow.setAttributes(p);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         //绑定按钮
         back =findViewById(R.id.back_8);
@@ -117,31 +170,37 @@ public class Task_Update extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                dismiss();
             }
         });
+
+        // 是否允许设置提醒
+//        if (getdate == null){
+//            ring_setup.setVisibility(View.INVISIBLE);
+//            rering_setup.setVisibility(View.INVISIBLE);
+//        }
 
         // 开启叶子计时
         switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    Toast.makeText(Task_Update.this,"开启叶子计时",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"开启叶子计时",Toast.LENGTH_SHORT).show();
                     leaveseventsign = 1;
                 }else {
-                    Toast.makeText(Task_Update.this,"关闭叶子计时",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"关闭叶子计时",Toast.LENGTH_SHORT).show();
                     leaveseventsign = 0;
                 }
             }
         });
 
         // 优先级选择
-        level_update.setOnClickListener(new View.OnClickListener() {
+        level_update.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Level_select level_select = new Level_select(Task_Update.this,R.style.dialog);
+                Level_select level_select = new Level_select(getContext(),R.style.dialog);
                 level_select.show();
-                level_select.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                level_select.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         initlevelupdate();
@@ -162,9 +221,9 @@ public class Task_Update extends AppCompatActivity {
         list_name_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List_select list_select = new List_select(Task_Update.this,R.style.dialog);
+                List_select list_select = new List_select(getContext(),R.style.dialog);
                 list_select.show();
-                list_select.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                list_select.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
 
@@ -177,9 +236,9 @@ public class Task_Update extends AppCompatActivity {
         rering_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Rering_setup rering_setup = new Rering_setup(Task_Update.this,R.style.dialog);
+                Rering_setup rering_setup = new Rering_setup(getContext(),R.style.dialog);
                 rering_setup.show();
-                rering_setup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                rering_setup.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
 
@@ -192,9 +251,9 @@ public class Task_Update extends AppCompatActivity {
         ring_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Ringtime_setup ringtime_setup = new Ringtime_setup(Task_Update.this,R.style.dialog);
+                Ringtime_setup ringtime_setup = new Ringtime_setup(getContext(),R.style.dialog);
                 ringtime_setup.show();
-                ringtime_setup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                ringtime_setup.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
 
@@ -228,7 +287,8 @@ public class Task_Update extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                finish();
+                issure = true;
+                dismiss();
             }
         });
 
@@ -238,7 +298,12 @@ public class Task_Update extends AppCompatActivity {
             public void onClick(View v) {
                 initCustomTimePicker();
                 pvCustomTime.show();
-                Toast.makeText(Task_Update.this,getdate,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getdate,Toast.LENGTH_SHORT).show();
+                // 是否允许设置提醒
+//                if (getdate != null || !eventdate.toString().equals("Sat Jan 01 00:00:00 GMT+00:00 1")){
+//                    ring_setup.setVisibility(View.VISIBLE);
+//                    rering_setup.setVisibility(View.VISIBLE);
+//                }
             }
         });
 
@@ -264,12 +329,13 @@ public class Task_Update extends AppCompatActivity {
                 }
             }
         });
-
+//        this.setCanceledOnTouchOutside(false);
+//        this.setCancelable(true);
     }
 
     private void showPopupMenu(View view) {
         // View当前PopupMenu显示的相对View的位置
-        PopupMenu popupMenu = new PopupMenu(this, view);
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
         // menu布局
         popupMenu.getMenuInflater().inflate(R.menu.task_up, popupMenu.getMenu());
         gMenuItem1 = popupMenu.getMenu().findItem(R.id.save);
@@ -280,7 +346,7 @@ public class Task_Update extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.save:
-                        Toast.makeText(Task_Update.this,"保存",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"保存",Toast.LENGTH_SHORT).show();
                         Thread t = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -300,87 +366,9 @@ public class Task_Update extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Thread w = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                LoadAllEvent loadAllEvent = new LoadAllEvent();
-                                try {
-                                    Thread.sleep(300);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                loadAllEvent.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
+                        issure = true;
 
-                            }
-                        });
-                        w.start();
-                        try {
-                            w.join(30000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Thread u = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                for (int i = 0; i < 10; i++) {
-                                    Message msg = Message.obtain();
-                                    msg.what = 1;
-                                    msg.obj = System.currentTimeMillis() + "";
-                                    page1.handler1.sendMessage(msg);
-                                    Log.i("MThread", Thread.currentThread().getName() + "----发送了消息！" + msg.obj);
-                                    SystemClock.sleep(1000);
-                                }
-                            }
-                        });
-                        u.start();
-                        finish();
-                        break;
-                    case R.id.delete:
-                        Toast.makeText(Task_Update.this,"删除",Toast.LENGTH_SHORT).show();
-                        Thread r = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                DeleteEvent deleteEvent = new DeleteEvent();
-                                try {
-                                    Thread.sleep(300);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                deleteEvent.getRemoteInfo(eventid);
-                            }
-                        });
-                        r.start();
-                        try {
-                            r.join(30000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        Thread s = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                LoadAllEvent loadAllEvent = new LoadAllEvent();
-                                try {
-                                    Thread.sleep(300);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                loadAllEvent.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid());
-
-                            }
-                        });
-                        s.start();
-                        try {
-                            s.join(30000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-//                        Thread v = new Thread(new Runnable() {
+//                        Thread u = new Thread(new Runnable() {
 //                            @Override
 //                            public void run() {
 //                                // TODO Auto-generated method stub
@@ -394,10 +382,56 @@ public class Task_Update extends AppCompatActivity {
 //                                }
 //                            }
 //                        });
-//                        v.start();
-                        finish();
+//                        u.start();
+//                        try {
+//                            u.join(30000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+                        dismiss();
                         break;
-                    default:
+                    case R.id.delete:
+                        Toast.makeText(getContext(),"删除",Toast.LENGTH_SHORT).show();
+//                        final AlertDialog.Builder alterDialog = new AlertDialog.Builder(getContext());
+//                        alterDialog.setTitle("提示！");
+//                        alterDialog.setTitleColor(Color.parseColor("#00c8aa"));
+//                        alterDialog.setMessage("您确定要删除这个任务吗？");
+//                        alterDialog.setCancelable(false);
+                        final Delete delete = new Delete(getContext(), R.style.dialog);
+                        delete.show();
+                        delete.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                if (delete.getIssue()) {
+                                    // TODO: 2018/6/26 事务删除
+                                    Thread r = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // TODO Auto-generated method stub
+                                            DeleteEvent deleteEvent = new DeleteEvent();
+                                            try {
+                                                Thread.sleep(300);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                            deleteEvent.getRemoteInfo(eventid);
+                                        }
+                                    });
+                                    r.start();
+                                    try {
+                                        r.join(30000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    issure = true;
+                                    dismiss();
+                                }
+                            }
+
+                        });
+
+                        break;
+                    default:break;
                 }
                 return true;
             }
@@ -416,7 +450,7 @@ public class Task_Update extends AppCompatActivity {
     }
     private void initCustomTimePicker() {//Dialog 模式下，在底部弹出
         selectedDate = Calendar.getInstance();
-        pvCustomTime = new TimePickerBuilder(Task_Update.this, new OnTimeSelectListener() {
+        pvCustomTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 getdate = getTime(date);
@@ -475,7 +509,7 @@ public class Task_Update extends AppCompatActivity {
         }
     }
     private void initCustomTimePicker2() {
-        pvTime = new TimePickerBuilder(Task_Update.this, new OnTimeSelectListener() {
+        pvTime = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 getdate = getTime(date);

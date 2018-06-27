@@ -109,6 +109,9 @@
     <string name="暂缓">暂缓</string>
     <string name="推迟">推迟5分钟</string>
     <string name="打开app">打开app</string>
+    <string name="上传头像">上传头像（拍照或选择本地相册）</string>
+    <string name="提示">提示！</string>
+    <string name="您确定要删除这个任务吗">您确定要删除这个任务吗？</string>
     <string-array name="周期模式1">
         <item>日</item>
         <item>一</item>

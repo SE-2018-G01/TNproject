@@ -34,8 +34,7 @@ public class Ringtime_setup extends Dialog implements AdapterView.OnItemClickLis
     private ArrayList<String> list = new ArrayList<>();
     private int position;
     private String show;
-
-    private Boolean aheaddx = true;
+//    private Boolean aheaddx = true;
 
     public Ringtime_setup(Context context) {
         super(context);
@@ -108,7 +107,7 @@ public class Ringtime_setup extends Dialog implements AdapterView.OnItemClickLis
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                aheaddx = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
+                BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
             }
         });
         t.start();
@@ -117,7 +116,7 @@ public class Ringtime_setup extends Dialog implements AdapterView.OnItemClickLis
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (!aheaddx){
+        if (BeanDRemindInformation.tsset == null){
             Thread s = new Thread(new Runnable() {
                 @Override
                 public void run() {

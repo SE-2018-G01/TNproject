@@ -40,6 +40,7 @@ import com.example.administrator.timenote.Manager.TaskManager.Complete;
 import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
 import com.example.administrator.timenote.Manager.TaskManager.LoadAllEventByPro;
 import com.example.administrator.timenote.Manager.TaskManager.UnComplete;
+import com.example.administrator.timenote.Manager.TaskManager.UpdatePid;
 import com.example.administrator.timenote.Manager.TaskManager.UpdatePriority;
 import com.example.administrator.timenote.Manager.UserManager.GetHead;
 import com.example.administrator.timenote.Manager.UserManager.UserLogin;
@@ -72,6 +73,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     private TextView list_name_1;// 清单名称
     private ListView listView;// 事务列表
     private ListView list_menu;// 清单列表
+    public static List_Update list_update;
     private List<List_menu> list;
     private Level_select level_select;// 优先级选择界面
     private New_List new_list;// 新建清单
@@ -82,10 +84,12 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     private TextView name;// 侧滑菜单名字
     private static boolean stase1 = true, stase2 = false, stase3 = true;// 列表显示状态
     private int ringpid;
+    private Task_Update task_update;
     public static Handler handler1;
+    private int eventidget;
 
 
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
         View view = inflater.inflate(R.layout.page1, container, false);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.page1);
@@ -108,7 +112,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99);
+                BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99);
                 BeanDRemindInformation.defaultset = BeanDRemindInformation.tsset;
             }
         });
@@ -243,36 +247,34 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        initReflesh();
-                        if (new_task.getdate != null){
-                            Date date = null;
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                            try {
-                                date = formatter.parse(new_task.getdate);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                        if (new_task.issure()) {
+                            initReflesh();
+                            if(stase3){
+                                initadapter();
                             }
-                            int eventid = 0;
-                            for (int i = 0; i < BeanEventInformation.allEventList.size(); i++) {
-                                if (BeanEventInformation.allEventList.get(eventid).getEventid() < BeanEventInformation.allEventList.get(i).getEventid())
-                                    eventid = i;
+                            else {
+                                inittoday();
                             }
-                            switch (BeanDRemindInformation.defaultset.getAheadtime()){
-                                case 0:break;
-                                case 1:
+                            if (new_task.getdate != null) {
+                                Date date = null;
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                try {
+                                    date = formatter.parse(new_task.getdate);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                int eventid = 0;
+                                for (int i = 0; i < BeanEventInformation.allEventList.size(); i++) {
+                                    if (eventid < BeanEventInformation.allEventList.get(i).getEventid())
+                                        eventid = BeanEventInformation.allEventList.get(i).getEventid();
+                                }
+                                setAlarm(date, BeanDRemindInformation.defaultset.getDremindring(),
+                                        Boolean.valueOf(BeanDRemindInformation.defaultset.getDremindvib()),
+                                        BeanDRemindInformation.defaultset.getAheadtime(),
+                                        BeanDRemindInformation.defaultset.getDremindrepeat(),
+                                        eventid, new_task.scode, new_task.getdate);
+
                             }
-                            setAlarm(date, BeanDRemindInformation.defaultset.getDremindring(),Boolean.valueOf(BeanDRemindInformation.defaultset.getDremindvib()));
-
-
-                            //BeanDRemindInformation.defaultset.getDremindrepeat();
-
-                        }
-                        initReflesh();
-                        if(stase3){
-                            initadapter();
-                        }
-                        else {
-                            inittoday();
                         }
                     }
                 });
@@ -357,39 +359,82 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
             case R.id.taskdes:
             case R.id.data_1:
             case R.id.taskname:
-                Intent intent1 = new Intent(getContext(), Task_Update.class);
-                intent1.putExtra("eventname", MyCustomAdapter.getData().get(position).getEventname());
-                intent1.putExtra("eventid", MyCustomAdapter.getData().get(position).getEventid());
-                intent1.putExtra("eventnote", MyCustomAdapter.getData().get(position).getEventnote());
-                intent1.putExtra("leaveseventsign", MyCustomAdapter.getData().get(position).getLeaveseventsign());
-                getContext().startActivity(intent1);
-                Thread r = new Thread(new Runnable() {
-                    public Handler getHandler(){//注意哦，在run执行之前，返回的是null
-                        return handler1;
-                    }
-                    @SuppressLint("HandlerLeak")
+                task_update = new Task_Update(getContext(),R.style.dialog1,
+                        MyCustomAdapter.getData().get(position).getEventid(),
+                        MyCustomAdapter.getData().get(position).getEventname(),
+                        MyCustomAdapter.getData().get(position).getEventnote(),
+                        MyCustomAdapter.getData().get(position).getLeaveseventsign(),
+                        MyCustomAdapter.getData().get(position).getEventdate());
+                task_update.show();
+                task_update.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
-                    public void run() {
-
-                        Looper.prepare();
-                        handler1 = new Handler() {
-                            public void handleMessage(android.os.Message msg) {
-                                //这里处理消息
-                                Log.i("MThread", "收到消息了：" + Thread.currentThread().getName() + "----" + msg.obj);
-                                if(stase3){
-                                    initadapter();
-                                }
-                                else {
-                                    inittoday();
-                                }
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        if (task_update.issure())
+                        {
+                            int eventid = MyCustomAdapter.getData().get(position).getEventid();
+                            initReflesh();
+                            if(stase3){
+                                initadapter();
+                            }
+                            else {
+                                inittoday();
                             }
 
-                        };
-                        Looper.loop();
+                            Thread t = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // TODO Auto-generated method stub
+                                    LoadDremind loadDremind = new LoadDremind();
+                                    try {
+                                        Thread.sleep(300);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),MyCustomAdapter.getData().get(position).getEventid());
+                                }
+                            });
+                            t.start();
+                            try {
+                                t.join(30000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            int pos = 0;
+                            for (int i = 0; i < allEventList.size(); i++){
+                                if (allEventList.get(i).getEventid() == eventid){
+                                    pos = i;
+                                    break;
+                                }
+                            }
+                            if ( BeanDRemindInformation.tsset != null) {
+                                updateAlarm(allEventList.get(pos).getEventdate(),
+                                        BeanDRemindInformation.defaultset.getDremindring(),
+                                        Boolean.valueOf(BeanDRemindInformation.tsset.getDremindvib()),
+                                        BeanDRemindInformation.tsset.getAheadtime(),
+                                        BeanDRemindInformation.tsset.getDremindrepeat(),
+                                        eventid,
+                                        allEventList.get(pos).getEventname(),
+                                        allEventList.get(pos).getPid(),
+                                        new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(allEventList.get(pos).getEventdate()));
+
+                            }
+                            else {
+                                updateAlarm(allEventList.get(pos).getEventdate(),
+                                        BeanDRemindInformation.defaultset.getDremindring(),
+                                        Boolean.valueOf(BeanDRemindInformation.defaultset.getDremindvib()),
+                                        BeanDRemindInformation.defaultset.getAheadtime(),
+                                        BeanDRemindInformation.defaultset.getDremindrepeat(),
+                                        eventid,
+                                        allEventList.get(pos).getEventname(),
+                                        allEventList.get(pos).getPid(),
+                                        new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(allEventList.get(pos).getEventdate()));
+                            }
+                        }
                     }
                 });
-                r.start();
-                //Toast.makeText(getContext(), "an", Toast.LENGTH_SHORT).show();
+
                 break;
             // 修改优先级
             case R.id.image_level:
@@ -540,12 +585,24 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
 
                 }
                 else if(name.equals("设置清单")){
-                    Intent intent3 = new Intent(getContext(),List_Update.class);
-                    startActivity(intent3);
+                    list_update = new List_Update(getContext(),R.style.dialog1);
+                    list_update.show();
+                    list_update.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            inindrawer();
+                        }
+                    });
                 }
-                else {
-                    inindrawer();
-                }
+//                else {
+//                    inindrawer();
+//                    if(stase3){
+//                        initadapter();
+//                    }
+//                    else {
+//                        inittoday();
+//                    }
+//                }
 
                 break;
             default:
@@ -553,21 +610,115 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         }
     }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void setAlarm(Date date,int ring,Boolean vib){
+    private void setAlarm(Date date, int ring, Boolean vib, int ahead, int repeat, int eventid, String eventname, String eventdate){
         Calendar calendar = Calendar.getInstance();
+        if (calendar.getTimeInMillis() > date.getTime()){
+            return;
+        }
+        eventidget = eventid;
         calendar.setTime(date);
+        long mils = 0;
+        switch (ahead){
+            case 0:break;
+            case 1:mils = 1000*60*5;break;
+            case 2:mils = 1000*60*30;break;
+            case 3:mils = 1000*60*60;break;
+            case 4:mils = 1000*60*60*24;break;
+        }
         //跳转
         Intent intent=new Intent();
         ringpid = UUID.randomUUID().hashCode();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                UpdatePid updatePid = new UpdatePid();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                updatePid.getRemoteInfo(eventidget, ringpid);
+            }
+        });
+        t.start();
+        try {
+            t.join(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         intent.setAction("com.liuqian.android_27alarm.RING");
-        intent.putExtra("id",ringpid);
-        intent.putExtra("ring",ring);
-        intent.putExtra("vib",vib);
+        intent.putExtra("id", ringpid);
+        intent.putExtra("ring", ring);
+        intent.putExtra("vib", vib);
+        intent.putExtra("ahead", ahead);
+        intent.putExtra("repeat", repeat);
+        intent.putExtra("eventid", eventid);
+        intent.putExtra("eventname", eventname);
+        intent.putExtra("eventdate", eventdate);
         //PendingIntent
         PendingIntent pendingIntent= PendingIntent.getBroadcast(getContext(),ringpid,intent,0);
         //闹钟管理者 参数： 唤醒屏幕，
-        Calendar_View.alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        Calendar_View.alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - mils, pendingIntent);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void updateAlarm(Date date, int ring, Boolean vib, int ahead, int repeat, int eventid, String eventname, int pid, String eventdate){
+        Calendar calendar = Calendar.getInstance();
+        if (calendar.getTimeInMillis() > date.getTime()){
+            return;
+        }
+        eventidget = eventid;
+        calendar.setTime(date);
+        long mils = 0;
+        switch (ahead){
+            case 0:break;
+            case 1:mils = 1000*60*5;break;
+            case 2:mils = 1000*60*30;break;
+            case 3:mils = 1000*60*60;break;
+            case 4:mils = 1000*60*60*24;break;
+        }
+        //跳转
+        Intent intent=new Intent();
+        if (pid == -99){
+            ringpid = UUID.randomUUID().hashCode();
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    UpdatePid updatePid = new UpdatePid();
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    updatePid.getRemoteInfo(eventidget, ringpid);
+                }
+            });
+            t.start();
+            try {
+                t.join(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+            ringpid = pid;
+        intent.setAction("com.liuqian.android_27alarm.RING");
+        intent.putExtra("id", ringpid);
+        intent.putExtra("ring", ring);
+        intent.putExtra("vib", vib);
+        intent.putExtra("ahead", ahead);
+        intent.putExtra("repeat", repeat);
+        intent.putExtra("eventid", eventid);
+        intent.putExtra("eventname", eventname);
+        intent.putExtra("eventdate", eventdate);
+        //PendingIntent
+        PendingIntent pendingIntent= PendingIntent.getBroadcast(getContext(),ringpid,intent,0);
+        //闹钟管理者 参数： 唤醒屏幕，
+        Calendar_View.alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - mils, pendingIntent);
+    }
+
         private void inindrawer(){
         list = new ArrayList<>();
         Bitmap bmp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.menu_list);
@@ -619,7 +770,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
     // 装载今天
     private void inittoday(){
         MyCustomAdapter adapter = new MyCustomAdapter(this.inflater.getContext());
-
+        listView.setAdapter(adapter);
 
         int j = 0;
         if(j<allEventList.size()) {
@@ -627,12 +778,12 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
             Calendar calendar2 = Calendar.getInstance();
             calendar2.setTime(allEventList.get(j).getEventdate());
 
-            listView.setAdapter(adapter);
+
 
             //adapter.addSeparatorItem(new BeanEventInformation("今天"));
             list_name_1.setText("今天");
 
-            if (stase2 == true) {
+            if (stase2) {
                 List<BeanEventInformation> allEventBypro = new ArrayList<>();
                 for (int n = 0; n < allEventList.size(); n++) {
                     calendar2.setTime(allEventList.get(n).getEventdate());
@@ -655,13 +806,13 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                     allEventBypro.set(m, eventchange);
                 }
                 for (int k = 0; k < allEventBypro.size(); k++) {
-                    if (stase1 == true && allEventBypro.get(k).getCheckBox() == 1)
+                    if (stase1 && allEventBypro.get(k).getCheckBox() == 1)
                         continue;
                     adapter.addItem(allEventBypro.get(k));
                 }
             } else {
                 for (; j < allEventList.size(); j++) {
-                    if (stase1 == true && allEventList.get(j).getCheckBox() == 1)
+                    if (stase1 && allEventList.get(j).getCheckBox() == 1)
                         continue;
                     calendar2.setTime(allEventList.get(j).getEventdate());
                     if ((calendar1.get(Calendar.YEAR) == calendar1.get(Calendar.YEAR)) && (calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH)) && (calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH)))
@@ -734,7 +885,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
        // adapter.addSeparatorItem(new BeanEventInformation(allList.get(position - 3).getListname());
         list_name_1.setText(allList.get(position - 3).getListname());
 
-        if (stase2 == true){
+        if (stase2){
             List<BeanEventInformation> allEventBypro = new ArrayList<>();
             for (int n = 0; n<allEventList.size(); n++){
                 if (position - 3 == allEventList.get(n).getListid())
@@ -756,7 +907,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
                 allEventBypro.set(m, eventchange);
             }
             for(int k = 0; k < allEventBypro.size(); k++){
-                if(stase1 == true && allEventBypro.get(k).getCheckBox() == 1)
+                if(stase1 && allEventBypro.get(k).getCheckBox() == 1)
                     continue;
                 adapter.addItem(allEventBypro.get(k));
             }
@@ -764,7 +915,7 @@ public class page1  extends Fragment implements AdapterView.OnItemClickListener,
         else {
             for (int i = 0; i < allEventList.size(); i++) {
                 if ((allList.get(position - 3).getListid()) == allEventList.get(i).getListid()) {
-                    if (stase1 == true && allEventList.get(i).getCheckBox() == 1) continue;
+                    if (stase1 && allEventList.get(i).getCheckBox() == 1) continue;
                     adapter.addItem(allEventList.get(i));
                 }
 

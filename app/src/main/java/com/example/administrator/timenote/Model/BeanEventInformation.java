@@ -22,6 +22,8 @@ public class BeanEventInformation {
     private String leaveseventsign;// 数据库存储形式为Boolean
     private int checkBox;
     private String datetype; // 标题
+    private Date date_1; // 标题
+    private int pid;
 
     public Date getDate_1() {
         return date_1;
@@ -31,8 +33,13 @@ public class BeanEventInformation {
         this.date_1 = date_1;
     }
 
-    private Date date_1; // 标题
+    public int getPid() {
+        return pid;
+    }
 
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
 
     public String getDatetype() {
         return datetype;

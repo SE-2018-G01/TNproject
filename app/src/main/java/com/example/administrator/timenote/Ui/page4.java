@@ -2,13 +2,19 @@ package com.example.administrator.timenote.Ui;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -41,6 +47,7 @@ import com.example.administrator.timenote.Manager.DremindManager.LoadDremind;
 import com.example.administrator.timenote.Model.BeanDRemindInformation;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
+import com.example.administrator.timenote.Ring.RingActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,6 +73,7 @@ public class page4 extends Fragment {
     private yezi_time_select yezi_time_select1;//设置叶子时长界面
     private int time_p;// 定义时间位置
     private String time_get;// 获取时间
+    private MediaPlayer mediaPlayer;
 
     public static void setUser_name_page4(String user_name_page4) {
         page4.user_name_page4.setText(user_name_page4);
@@ -324,6 +332,97 @@ public class page4 extends Fragment {
         time_ring_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+                // 试听
+                if (BeanDRemindInformation.defaultset.getDremindring() != position) {
+                    switch (position) {
+                        case 0:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = new MediaPlayer();
+                            break;
+                        case 1:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.one);
+                            mediaPlayer.setLooping(true);
+                            mediaPlayer.start();
+                            break;
+                        case 2:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.two);
+                            mediaPlayer.setLooping(true);
+                            mediaPlayer.start();
+                            break;
+                        case 3:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.three);
+                            mediaPlayer.setLooping(true);
+                            mediaPlayer.start();
+                            break;
+                        case 4:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.four);
+                            mediaPlayer.setLooping(true);
+                            mediaPlayer.start();
+                            break;
+                        case 5:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.five);
+                            mediaPlayer.setLooping(true);
+                            mediaPlayer.start();
+                            break;
+                        case 6:
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                }
+                                cdt.cancel();
+                            }
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.six);
+                            mediaPlayer.setLooping(true);
+                            mediaPlayer.start();
+                            break;
+                        default:
+                            break;
+                    }
+                    cdt.start();
+                }
+
                     // 更新设置
                     Thread t = new Thread(new Runnable() {
                         @Override
@@ -513,7 +612,7 @@ public class page4 extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99);
+                BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),-99);
                 BeanDRemindInformation.defaultset = BeanDRemindInformation.tsset;
             }
         });
@@ -524,4 +623,24 @@ public class page4 extends Fragment {
             e.printStackTrace();
         }
     }
+
+    CountDownTimer cdt = new CountDownTimer(10000, 5000) {
+
+        @SuppressLint({"ResourceAsColor", "SetTextI18n"})
+        public void onTick(long millisUntilFinished) {
+        }
+        @SuppressLint("ResourceAsColor")
+        @Override
+        public void onFinish() {
+
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+            }
+        }
+
+    };
+
 }

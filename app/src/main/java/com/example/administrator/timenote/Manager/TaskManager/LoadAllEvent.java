@@ -68,6 +68,7 @@ public class LoadAllEvent {
                 e.setLeaveseventsign(mstr.getProperty("Leaveseventsign").toString());
                 if(!mstr.getProperty("Eventnote").toString().equals("anyType{}")) e.setEventnote(mstr.getProperty("Eventnote").toString());
                 e.setCheckBox(Integer.parseInt(mstr.getProperty("Complete").toString()));
+                e.setPid(Integer.parseInt(mstr.getProperty("Pid").toString()));
                 allEventListByDate.add(e);
             }
             BeanEventInformation.allEventList = allEventListByDate;

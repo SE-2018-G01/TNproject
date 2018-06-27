@@ -36,7 +36,7 @@ public class LoadDremind {
     HttpTransportSE transport = new HttpTransportSE(endPoint,60000*5);
 
     //创建子线程并引用webservice层的LoadUser方法
-    public Boolean getRemoteInfo(int userid,int eventid) {
+    public BeanDRemindInformation getRemoteInfo(int userid,int eventid) {
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
@@ -48,12 +48,12 @@ public class LoadDremind {
         (new MarshalBase64()).register(envelope);
         // 等价于envelope.bodyOut = rpc;   envelope.setOutputSoapObject(rpc);
         transport.debug = false;
+        BeanDRemindInformation dr = new BeanDRemindInformation();
         try {
             transport.call(soapAction, envelope);
             SoapObject result = (SoapObject) envelope.getResponse();
             if (result == null)
-                return false;
-            BeanDRemindInformation dr = new BeanDRemindInformation();
+                return null;
             dr.setUserid(Integer.parseInt(result.getProperty("Userid").toString()));
             dr.setEventid(Integer.parseInt(result.getProperty("Eventid").toString()));
             dr.setDremindid(Integer.parseInt(result.getProperty("Dremindid").toString()));
@@ -64,16 +64,14 @@ public class LoadDremind {
             dr.setLeavestime(Integer.parseInt(result.getProperty("Leavestime").toString()));
             dr.setDefaulttime(result.getProperty("Defaulttime").toString());
             dr.setDremindvib(result.getProperty("Dremindvib").toString());
-            BeanDRemindInformation.tsset = dr;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return dr;
     }
 
     public static void main(String[] args){
         LoadDremind loadDremind = new LoadDremind();
-        loadDremind.getRemoteInfo(9,-99);
+        loadDremind.getRemoteInfo(9,200);
     }
 }

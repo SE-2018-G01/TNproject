@@ -33,8 +33,7 @@ public class Rering_setup extends Dialog implements AdapterView.OnItemClickListe
     private ArrayList<String> list = new ArrayList<>();
     private int position;
     private String show;
-
-    private Boolean redx = true;
+//    private Boolean redx = true;
 
     public Rering_setup(Context context) {
         super(context);
@@ -108,7 +107,7 @@ public class Rering_setup extends Dialog implements AdapterView.OnItemClickListe
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                redx = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
+                BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),Task_Update.getEventid());
             }
         });
         t.start();
@@ -117,7 +116,7 @@ public class Rering_setup extends Dialog implements AdapterView.OnItemClickListe
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (!redx){
+        if (BeanDRemindInformation.tsset == null){
             Thread s = new Thread(new Runnable() {
                 @Override
                 public void run() {

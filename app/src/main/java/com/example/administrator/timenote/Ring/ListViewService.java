@@ -85,7 +85,7 @@ public class ListViewService extends RemoteViewsService {
                     if ((millis >= 0) && (millis <= (1000 * 60 * 60 * 24)) && (!allEventList.get(i).getEventdate().toString().equals("Sat Jan 01 00:00:00 GMT+08:00 1")))
                         todayEvent.add(allEventList.get(i).getEventname());
             }
-            System.out.print(1);
+          //  System.out.print(1);
             }
         }
 
@@ -107,8 +107,12 @@ public class ListViewService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.my_widget_layout_item);
-            views.setTextViewText(R.id.task_1, "item:" +  todayEvent.get(position));
-
+            if (todayEvent == null){
+                views.setTextViewText(R.id.task_1, "今日无任务");
+            }
+            else {
+                views.setTextViewText(R.id.task_1, todayEvent.get(position));
+            }
             Bundle extras = new Bundle();
             extras.putInt(ListViewService.INITENT_DATA, position);
             Intent changeIntent = new Intent();

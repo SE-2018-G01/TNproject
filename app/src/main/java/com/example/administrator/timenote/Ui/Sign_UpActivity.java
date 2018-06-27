@@ -126,7 +126,6 @@ public class Sign_UpActivity extends AppCompatActivity {
                             }
                             userLogin.getRemoteInfo(semail);
                             runOnUiThread(new Runnable(){
-
                                 @Override
                                 public void run() {
                                     // 更新UI

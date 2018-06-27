@@ -29,11 +29,13 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
 import com.example.administrator.timenote.Manager.TaskManager.NewEvent;
+import com.example.administrator.timenote.Model.BeanDRemindInformation;
 import com.example.administrator.timenote.Model.BeanUserInformation;
 import com.example.administrator.timenote.R;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +58,10 @@ public class New_task extends Dialog {
     public String scode; // 事务名称获取
     private Calendar selectedDate; // 系统时间获取
     public EditText task; // 任务输入框
+    private boolean issure = false;
+    public boolean issure() {
+        return issure;
+    }
 
     public New_task(Context context) {
         super(context);
@@ -65,8 +71,13 @@ public class New_task extends Dialog {
     public New_task(Context context, int theme) {
         super(context, theme);
         this.context = context;
+        selectedDate = Calendar.getInstance();
     }
-
+    public New_task(Context context, int theme, Calendar calendar) {
+        super(context, theme);
+        this.context = context;
+        this.selectedDate = calendar;
+    }
 
     @SuppressLint("ResourceAsColor")
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +92,38 @@ public class New_task extends Dialog {
 //             p.height = (int) (d.getHeight() ); // 高度设置为屏幕
 //            p.width = (int) (d.getWidth() ); // 宽度设置为屏幕
         dialogWindow.setAttributes(p);
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        getdate = sdf.format(selectedDate.getTime());
+        String defaulttime;
+        switch (BeanDRemindInformation.defaultset.getDefaulttime()){
+            case "0":defaulttime = "00:00";break;
+            case "1":defaulttime = "02:00";break;
+            case "2":defaulttime = "04:00";break;
+            case "3":defaulttime = "06:00";break;
+            case "4":defaulttime = "08:00";break;
+            case "5":defaulttime = "10:00";break;
+            case "6":defaulttime = "12:00";break;
+            case "7":defaulttime = "14:00";break;
+            case "8":defaulttime = "16:00";break;
+            case "9":defaulttime = "18:00";break;
+            case "10":defaulttime = "20:00";break;
+            case "11":defaulttime = "22:00";break;
+            default:defaulttime = BeanDRemindInformation.defaultset.getDefaulttime();break;
+        }
+        SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
+        Date date = null;
+        try {
+            date = sdf.parse(defaulttime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        selectedDate.set(Calendar.HOUR_OF_DAY,calendar.get(Calendar.HOUR));
+        selectedDate.set(Calendar.MINUTE,calendar.get(Calendar.MINUTE));
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        getdate = sdf1.format(selectedDate.getTime());
 
         // 根据id在布局中找到控件对象
         back = findViewById(R.id.back_3);
@@ -128,6 +171,7 @@ public class New_task extends Dialog {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                issure = true;
                 dismiss();
             }
         });
@@ -224,7 +268,6 @@ public class New_task extends Dialog {
         }
     }
     private void initCustomTimePicker() {//Dialog 模式下，在底部弹出
-        selectedDate = Calendar.getInstance();
         pvCustomTime = new TimePickerBuilder(context, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
