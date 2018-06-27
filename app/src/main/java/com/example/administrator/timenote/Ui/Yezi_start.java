@@ -30,7 +30,7 @@ public class Yezi_start extends AppCompatActivity{
     private TextView task_name;// 当前事物名称
     private TextView time;// 时间
     private static int M = 0;// 分钟
-    private int s = 10;// 秒
+    private int s = 0;// 秒
     private int p;
     private Task_select_list task_select_list;// 事务选择
 

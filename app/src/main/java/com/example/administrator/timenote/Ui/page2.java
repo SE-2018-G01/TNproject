@@ -270,11 +270,11 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
             case R.id.taskname:
 
                 task_update = new Task_Update(getContext(),R.style.dialog1,
-                        MyCustomAdapter.getData().get(position).getEventid(),
-                        MyCustomAdapter.getData().get(position).getEventname(),
-                        MyCustomAdapter.getData().get(position).getEventnote(),
-                        MyCustomAdapter.getData().get(position).getLeaveseventsign(),
-                        MyCustomAdapter.getData().get(position).getEventdate());
+                        MyCustomAdapter2.getData().get(position).getEventid(),
+                        MyCustomAdapter2.getData().get(position).getEventname(),
+                        MyCustomAdapter2.getData().get(position).getEventnote(),
+                        MyCustomAdapter2.getData().get(position).getLeaveseventsign(),
+                        MyCustomAdapter2.getData().get(position).getEventdate());
                 task_update.show();
                 task_update.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -282,7 +282,7 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
                     public void onDismiss(DialogInterface dialogInterface) {
                         if (task_update.issure())
                         {
-                            int eventid = MyCustomAdapter.getData().get(position).getEventid();
+                            int eventid = MyCustomAdapter2.getData().get(position).getEventid();
                             page1.initReflesh();
                             inittask(calendar.getTime());
                             Thread t = new Thread(new Runnable() {
@@ -295,7 +295,7 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
-                                    BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),MyCustomAdapter.getData().get(position).getEventid());
+                                    BeanDRemindInformation.tsset = loadDremind.getRemoteInfo(BeanUserInformation.currentLoginUser.getUserid(),MyCustomAdapter2.getData().get(position).getEventid());
                                 }
                             });
                             t.start();
@@ -367,13 +367,14 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
                             e.printStackTrace();
                         }
                         // 刷新
+                        page1.initReflesh();
                         inittask(calendar.getTime());
                     }
                 });
                 break;
             case R.id.checkBox:
                 // 设置已完成
-                if(MyCustomAdapter.getData().get(position).getCheckBox()==1)
+                if(MyCustomAdapter2.getData().get(position).getCheckBox()==1)
                 {
                     // TODO: 2018/6/17   修改为未完成
                     Thread t = new Thread(new Runnable() {
@@ -386,10 +387,10 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            unComplete.getRemoteInfo(MyCustomAdapter.getData().get(position).getEventid());
+                            unComplete.getRemoteInfo(MyCustomAdapter2.getData().get(position).getEventid());
                             int i = 0;
                             for (; i < allEventList.size(); i++){
-                                if (allEventList.get(i).getEventid() == MyCustomAdapter.getData().get(position).getEventid())
+                                if (allEventList.get(i).getEventid() == MyCustomAdapter2.getData().get(position).getEventid())
                                     break;
                             }
                             allEventList.get(i).setCheckBox(0);
@@ -418,10 +419,10 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            complete.getRemoteInfo(MyCustomAdapter.getData().get(position).getEventid());
+                            complete.getRemoteInfo(MyCustomAdapter2.getData().get(position).getEventid());
                             int i = 0;
                             for (; i < allEventList.size(); i++){
-                                if (allEventList.get(i).getEventid() == MyCustomAdapter.getData().get(position).getEventid())
+                                if (allEventList.get(i).getEventid() == MyCustomAdapter2.getData().get(position).getEventid())
                                     break;
                             }
                             allEventList.get(i).setCheckBox(1);
@@ -447,7 +448,7 @@ public class page2 extends Fragment implements OnDateSelectedListener, AdapterVi
     {
         MyCustomAdapter2 adapter = new MyCustomAdapter2(this.inflater1.getContext());
 
-        java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+        java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd");
         String datetype = formatter.format(date);//格式化数据
 
         int j = 0;

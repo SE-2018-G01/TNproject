@@ -65,9 +65,9 @@ public class page3 extends Fragment {
             tishi = "上午好";
         else if (calendar.get(Calendar.HOUR_OF_DAY) < 13)
             tishi = "中午了，休息一下";
-        else if (calendar.get(Calendar.HOUR_OF_DAY) < 6)
+        else if (calendar.get(Calendar.HOUR_OF_DAY) < 17)
             tishi = "下午也要加油";
-        else if (calendar.get(Calendar.HOUR_OF_DAY) < 7)
+        else if (calendar.get(Calendar.HOUR_OF_DAY) < 19)
             tishi = "是时候放松一下了";
         else if (calendar.get(Calendar.HOUR_OF_DAY) < 22)
             tishi = "晚上好";

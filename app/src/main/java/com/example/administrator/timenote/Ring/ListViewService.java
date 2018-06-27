@@ -1,26 +1,26 @@
 package com.example.administrator.timenote.Ring;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.RemoteViews;
-import android.widget.RemoteViewsService;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.os.Bundle;
+        import android.widget.RemoteViews;
+        import android.widget.RemoteViewsService;
 
-import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
-import com.example.administrator.timenote.Manager.UserManager.UserLogin;
-import com.example.administrator.timenote.Manager.UserManager.loginServe;
-import com.example.administrator.timenote.Model.BeanEventInformation;
-import com.example.administrator.timenote.Model.BeanUserInformation;
-import com.example.administrator.timenote.R;
-import com.example.administrator.timenote.Ui.MainActivity;
-import com.example.administrator.timenote.Ui.taskAdapter;
+        import com.example.administrator.timenote.Manager.TaskManager.LoadAllEvent;
+        import com.example.administrator.timenote.Manager.UserManager.UserLogin;
+        import com.example.administrator.timenote.Manager.UserManager.loginServe;
+        import com.example.administrator.timenote.Model.BeanEventInformation;
+        import com.example.administrator.timenote.Model.BeanUserInformation;
+        import com.example.administrator.timenote.R;
+        import com.example.administrator.timenote.Ui.MainActivity;
+        import com.example.administrator.timenote.Ui.taskAdapter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+        import java.util.ArrayList;
+        import java.util.Date;
+        import java.util.List;
+        import java.util.Map;
 
-import static com.example.administrator.timenote.Model.BeanEventInformation.allEventList;
+        import static com.example.administrator.timenote.Model.BeanEventInformation.allEventList;
 
 public class ListViewService extends RemoteViewsService {
     public static final String INITENT_DATA = "extra_data";
@@ -84,8 +84,8 @@ public class ListViewService extends RemoteViewsService {
                     millis = allEventList.get(i).getEventdate().getTime()-new Date(System.currentTimeMillis()).getTime();
                     if ((millis >= 0) && (millis <= (1000 * 60 * 60 * 24)) && (!allEventList.get(i).getEventdate().toString().equals("Sat Jan 01 00:00:00 GMT+08:00 1")))
                         todayEvent.add(allEventList.get(i).getEventname());
-            }
-          //  System.out.print(1);
+                }
+                //  System.out.print(1);
             }
         }
 

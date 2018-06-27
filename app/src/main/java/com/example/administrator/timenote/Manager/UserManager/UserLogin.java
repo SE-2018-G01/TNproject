@@ -85,7 +85,7 @@ public class UserLogin {
     }
     public static void main(String[] args){
         UserLogin userLogin = new UserLogin();
-        userLogin.getRemoteInfo("1191583108@qq.com");
+        userLogin.getRemoteInfo("yangc@zucc.edu.cn");
         System.out.println(tryLoginUser.getUseremail());
         System.out.println(tryLoginUser.getUserpassword());
     }

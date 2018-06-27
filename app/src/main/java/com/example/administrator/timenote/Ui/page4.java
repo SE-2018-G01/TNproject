@@ -339,17 +339,20 @@ public class page4 extends Fragment {
                             if (mediaPlayer != null) {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
+                                    mediaPlayer.reset();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
-                                cdt.cancel();
                             }
-                            mediaPlayer = new MediaPlayer();
+                            mediaPlayer = MediaPlayer.create(getContext(), R.raw.one);
                             break;
                         case 1:
                             if (mediaPlayer != null) {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
+                                    mediaPlayer.reset();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
                                 cdt.cancel();
                             }
@@ -361,7 +364,9 @@ public class page4 extends Fragment {
                             if (mediaPlayer != null) {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
+                                    mediaPlayer.reset();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
                                 cdt.cancel();
                             }
@@ -374,6 +379,7 @@ public class page4 extends Fragment {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
                                 cdt.cancel();
                             }
@@ -385,7 +391,9 @@ public class page4 extends Fragment {
                             if (mediaPlayer != null) {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
+                                    mediaPlayer.reset();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
                                 cdt.cancel();
                             }
@@ -398,6 +406,7 @@ public class page4 extends Fragment {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
                                 cdt.cancel();
                             }
@@ -409,7 +418,9 @@ public class page4 extends Fragment {
                             if (mediaPlayer != null) {
                                 if (mediaPlayer.isPlaying()) {
                                     mediaPlayer.stop();
+                                    mediaPlayer.reset();
                                     mediaPlayer.release();
+                                    mediaPlayer = null;
                                 }
                                 cdt.cancel();
                             }
@@ -636,7 +647,9 @@ public class page4 extends Fragment {
             if (mediaPlayer != null) {
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.stop();
+                    mediaPlayer.reset();
                     mediaPlayer.release();
+                    mediaPlayer = null;
                 }
             }
         }

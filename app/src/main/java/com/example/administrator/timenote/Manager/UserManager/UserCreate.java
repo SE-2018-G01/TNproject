@@ -53,7 +53,7 @@ public class UserCreate {
     }
     public static void main(String[] args){
         UserCreate userCreate = new UserCreate();
-        String sign = userCreate.getRemoteInfo("3469109048@qq.com","12345678","sproutgod");
+        String sign = userCreate.getRemoteInfo("sproutgod667@gmail.com","12345678","sproutgod");
         System.out.println(sign);
     }
 }
